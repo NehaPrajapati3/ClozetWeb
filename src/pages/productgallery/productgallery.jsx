@@ -14,7 +14,7 @@ const ProductGallery = ()=>{
                     </div>
                     <div className="gallery-m-heading">
                         <h2>Product Gallery</h2>
-                        <p>search product and use its info to create own product</p>
+                        <p>Search product and use its info to create own product</p>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@ const ProductGallery = ()=>{
                     <div className="show-list-head">
                     <div className="gallery-m-heading">
                         <h2>Product Gallery</h2>
-                        <p>search product and use its info to create own product</p>
+                        <p>Search product and use its info to create own product</p>
                     </div>
                     </div>
                     <div className="p-s-detail">

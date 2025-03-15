@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Productlist from "../productlist/productlist";
 
 const Newsale = () => {
   const [store, setStore] = React.useState('');
@@ -75,7 +76,7 @@ const Newsale = () => {
 
           <div className="no-product">
             <div className="see-products">
-
+              <Productlist/>
             </div>
           </div>
 
@@ -105,7 +106,7 @@ const Newsale = () => {
 
           </div>
           <div className="delivery-info">
-            <div className="home-deli"> <FaUser /> <h4>Delivery Infomation   <span>(Home Delivery)</span></h4></div>
+            <div className="home-deli"> <FaUser /> <h4>Delivery Information   <span>(Home Delivery)</span></h4></div>
             <div className="pen">
               <HiPencil />
             </div>
