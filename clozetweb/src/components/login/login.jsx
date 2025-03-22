@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import './login.css'
 import { signInWithEmailAndPassword } from "firebase/auth";
+import {useDispatch  } from "react-redux";
+import {login as authLogin} from '../store/authSlice.js'
 import { auth } from "../firebase/firebase";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,17 +12,21 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = ()=>{
     const [email,setEamil] = useState("");
     const [password,setPassword] = useState("");
-    const navgate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
         try{
           await signInWithEmailAndPassword(auth,email,password);
-          navgate("/home") ;
+          const userData = auth.currentUser;
+          dispatch(authLogin(userData));
+          navigate("/") ;
           console.log("User logged in Successufully");
           toast.success("User logged in Successfully",{
             position:"top-center",
           });
+
         }
         catch (error){
          console.log(error.message);
@@ -56,10 +62,10 @@ const Login = ()=>{
                 </div>
                 </div>
                 <div className="part2">
-                    <button>submit</button>
+                    <button>Submit</button>
                 </div>
                 <div className="already">
-                    <p>you don't have account<Link to='/signup'>Signup</Link></p>
+                    <p>Don't you have account?<Link to='/register'>Signup</Link></p>
                 </div>
                 
             </form>

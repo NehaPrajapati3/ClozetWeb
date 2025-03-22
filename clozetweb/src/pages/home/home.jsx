@@ -1,29 +1,29 @@
 import React, { createContext, useState } from "react";
 import Header from "../../components/header/header";
 import Sidebar from "../../components/sidebar/sidebar";
-
+import { Outlet } from "react-router-dom"; 
 import './home.css'
-import { Route, Routes } from "react-router-dom";
-import Dashboard from "../dashboard/dashboard";
+// import { Route, Routes } from "react-router-dom";
+// import Dashboard from "../dashboard/dashboard";
 
-import TransectionReport from '../transectionrp/transection';
-import StoresReport from '../storesreport/storereport';
-import ExpenseReport from '../expensereport/expensereport';
-import EmployeeRole from '../employeerole/employeerole';
-import AddNewEmployee from '../addnewemployee/addnewemployee';
-import EmployeeList from '../employeelist/employeelist';
-import StoreConfig from '../storeconfig/storeconfig';
-import MyShop from '../myshop/myshop';
-import MyWallet from '../mywallet/mywallet';
-import BankInfo from '../bankinfo/bankinfo';
-import Withdraw from '../withdraw_req/withdraw';
-import CollectCash from '../collectedcash/cashcollect';
-import DeliveryEarn from '../deliveryearn/deliveryearn';
-import Coupons from '../coupons/coupons';
-import Banners from '../banners/banners';
-import AllOrder from '../allorders/allorder';
-import Newsale from '../newsale/newsale';
-import Login from "../../components/login/login";
+// import TransectionReport from '../transectionrp/transection';
+// import StoresReport from '../storesreport/storereport';
+// import ExpenseReport from '../expensereport/expensereport';
+// import EmployeeRole from '../employeerole/employeerole';
+// import AddNewEmployee from '../addnewemployee/addnewemployee';
+// import EmployeeList from '../employeelist/employeelist';
+// import StoreConfig from '../storeconfig/storeconfig';
+// import MyShop from '../myshop/myshop';
+// import MyWallet from '../mywallet/mywallet';
+// import BankInfo from '../bankinfo/bankinfo';
+// import Withdraw from '../withdraw_req/withdraw';
+// import CollectCash from '../collectedcash/cashcollect';
+// import DeliveryEarn from '../deliveryearn/deliveryearn';
+// import Coupons from '../coupons/coupons';
+// import Banners from '../banners/banners';
+// import AllOrder from '../allorders/allorder';
+// import Newsale from '../newsale/newsale';
+// import Login from "../../components/login/login";
 
 
 
@@ -54,7 +54,8 @@ const Home = () => {
                         <Sidebar />
                     </div>
                     <div className={`page-content ${sidebardrop === true ? 'toggle' : ''}`}>
-                        <Routes>
+                    <Outlet /> 
+                        {/* <Routes>
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path='/allorder' element={<AllOrder />} />
                             <Route path='/newsale' element={<Newsale />} />
@@ -75,7 +76,7 @@ const Home = () => {
                             <Route path="/collectcash" element={<CollectCash />} />
                             <Route path="/deliverypayment" element={<DeliveryEarn />} />
                           
-                        </Routes>
+                        </Routes> */}
 
 
 

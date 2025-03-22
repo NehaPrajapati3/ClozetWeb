@@ -1,11 +1,13 @@
 import React ,{useState} from "react";
 import {createUserWithEmailAndPassword} from "firebase/auth";
+import {useDispatch  } from "react-redux";
 import { auth } from "../firebase/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { toast } from "react-toastify";
+import {login as authLogin} from '../store/authSlice.js'
 import './signUp.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = ()=>{
     const [email, setEmail] = useState("");
@@ -13,8 +15,12 @@ const SignUp = ()=>{
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    console.log("Sign up page")
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -31,6 +37,9 @@ const SignUp = ()=>{
       toast.success("User Registered Successfully!!", {
         position: "top-center",
       });
+      dispatch(authLogin(user));
+      
+      navigate("/login")
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, {
@@ -82,7 +91,7 @@ const SignUp = ()=>{
                 </div>
                
                 <div className="part2">
-                    <button>submit</button>
+                    <button>Submit</button>
                 </div>
                 <div className="already">
                     <p>Already have an account <Link to='/login'>Login</Link></p>

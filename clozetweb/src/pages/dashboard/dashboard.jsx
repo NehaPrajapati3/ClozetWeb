@@ -62,7 +62,7 @@ const Dashboard = ()=>{
                             <div className="confirem-info">
                                 <div className="confirem-count">
                                     <h2>0</h2>
-                                    <p>Confiremed</p>
+                                    <p>Confirmed</p>
                                     </div>
                                 </div>
                           </div>
