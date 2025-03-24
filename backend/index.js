@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
 import productRoute from "./routes/productRoute.js";
+import orderRoute from "./routes/orderRoute.js";
 
 import cors from "cors";
 
@@ -26,6 +27,7 @@ app.use(cors(corsOption))
 // Routes
 
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/order", orderRoute);
 
 
 app.listen(PORT, ()=>{

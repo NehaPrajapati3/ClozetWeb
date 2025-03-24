@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './login.css'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {useDispatch  } from "react-redux";
-import {login as authLogin} from '../store/authSlice.js'
+import {login as authLogin} from '../useFiles'
 import { auth } from "../firebase/firebase";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";

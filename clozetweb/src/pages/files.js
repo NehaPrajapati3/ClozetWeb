@@ -1,4 +1,12 @@
 import useGetProducts from "../hooks/useGetProducts.jsx";
-import {selectProducts} from "../redux/selector.js";
+import useGetOrders from "../hooks/useGetOrders.jsx";
+import {selectProducts, selectOrders} from "../redux/selectors.js";
+import {deleteProduct} from "../redux/productSlice.js";
 
-export { useGetProducts, selectProducts };
+export {
+  useGetProducts,
+  useGetOrders,
+  selectProducts,
+  selectOrders,
+  deleteProduct,
+};

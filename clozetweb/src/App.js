@@ -4,9 +4,9 @@ import './App.css';
 import React from "react";
 import AuthLayout from "./components/AuthLayout.jsx";
 import Login from './components/login/login';
-import store from "./components/store/store.js";
+
 import SignUp from './components/signUp/signUp';
-import {  Provider} from "react-redux";
+
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css"
@@ -163,9 +163,9 @@ function App() {
   return (
     <>
     
-    <Provider store = {store}>
+   
     <RouterProvider router = {router}/>
-    </Provider>
+    
     </>
   );
 }

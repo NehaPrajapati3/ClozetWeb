@@ -75,7 +75,7 @@ export const editItem = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    console.log(`Update data is ${updateData}`)
+   // console.log(`Update data is ${updateData}`)
 
     // Find and update item by ID
     const updatedItem = await Product.findByIdAndUpdate(id, updateData, {

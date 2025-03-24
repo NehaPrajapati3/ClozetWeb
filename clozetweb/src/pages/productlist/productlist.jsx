@@ -25,6 +25,9 @@ import { useSelector } from "react-redux";
 import { selectProducts } from "../files";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { deleteProduct } from "../files";
+import { useDispatch } from "react-redux";
+import { setProducts } from "../../redux/productSlice";
 
 const ProductList = () => {
   const [allCategoryItem, setAllCategoryItem] = useState("");
@@ -42,57 +45,62 @@ const ProductList = () => {
   };
 
   // const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
+ // const [products, setProducts] = useState([]);
+
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        axios.defaults.withCredentials = true;
-        const res = await axios.get(`http://localhost:8080/api/v1/product/all`);
-        console.log("Fetched response is", res);
-        setProducts(res.data.items);
-        console.log("Dispatched setProducts with:", res.data.items);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProducts();
-  }, []);
+  const dispatch = useDispatch();
 
-  // const handleUpdate = async (id) => {
-  //    try {
-  //      const res = await axios.put(
-  //        `http://localhost:8080/api/v1/product/edit/${id}`
-  //      );
-  //      if (res.data.success) {
-  //        toast.success(res.data.message);
-  //      }
+  useGetProducts();
+  const products  = useSelector(selectProducts);
+  
 
-  //      console.log(res);
-  //    } catch (error) {
-  //      toast.error(error.response.data.message);
-  //      console.log(error);
-  //    }
-  // };
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       axios.defaults.withCredentials = true;
+  //       const res = await axios.get(`http://localhost:8080/api/v1/product/all`);
+  //       console.log("Fetched response is", res);
+  //       setProducts(res.data.items);
+  //       console.log("Dispatched setProducts with:", res.data.items);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
 
-  const handleDelete = async (e, id) => {
+ 
+   const handleDelete = async (e, id) => {
     e.preventDefault();
     try {
       const res = await axios.delete(
         `http://localhost:8080/api/v1/product/delete/${id}`
       );
-      if (res.data.success) {
+      if (res?.data?.success) {
         toast.success(res.data.message);
       }
       console.log(res);
       // Update product list after deletion
-      const updatedProducts = products.filter((product) => product._id !== id);
-      setProducts(updatedProducts);
+       dispatch(deleteProduct(id));
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error);
     }
-  };
+   };
+
+   const searchSubmitHandler = (e) => {
+     e.preventDefault();
+     const searchProduct = products?.find((product) =>
+       product.name.toLowerCase().includes(search.toLowerCase())
+     );
+     if (searchProduct) {
+       dispatch(setProducts([searchProduct]));
+     } else {
+       toast.error("User not found");
+     }
+     setSearch("");
+   };
 
   return (
     <>
@@ -169,15 +177,22 @@ const ProductList = () => {
             <div className="main-list-table-section-box">
               <div className="main-list-s-top">
                 <div className="s-btn">
-                  <div className="s-input">
-                    <input
-                      type="text"
-                      placeholder="Search By Refrence or Name"
-                    />
-                    <div className="icon-s">
-                      <IoSearchSharp />
+                  <form action="" onSubmit={searchSubmitHandler}>
+                    <div className="s-input">
+                      <input
+                        type="text"
+                        placeholder="Search By Reference or Name"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+                      <button type="submit">
+                        <div className="icon-s">
+                          <IoSearchSharp />
+                        </div>
+                      </button>
                     </div>
-                  </div>
+                  </form>
+
                   <div className="ex-select">
                     <Link to="/addItem">
                       <Button className="e-btn">

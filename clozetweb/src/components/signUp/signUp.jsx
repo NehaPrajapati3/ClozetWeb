@@ -5,7 +5,7 @@ import { auth } from "../firebase/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { toast } from "react-toastify";
-import {login as authLogin} from '../store/authSlice.js'
+import {login as authLogin} from '../useFiles'
 import './signUp.css'
 import { Link, useNavigate } from "react-router-dom";
 
