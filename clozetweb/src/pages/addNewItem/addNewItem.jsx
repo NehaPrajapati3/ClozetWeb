@@ -23,144 +23,144 @@ function AddNewItem() {
   // const handleallItem = (event) => {
   //   setAllItem(event.target.value);
   // };
-//    const location = useLocation();
-//    const productToEdit = location.state?.product || null;
+  //    const location = useLocation();
+  //    const productToEdit = location.state?.product || null;
 
-//   const [newProduct, setNewProduct] = useState({
-//     name: productToEdit?.name || "",
-//     description: productToEdit?.description || "",
-//     tags: productToEdit?.tags || "",
-//     store: productToEdit?.store || "",
-//     category: productToEdit?.category || "",
-//     subCategory: productToEdit?.subCategory || "",
-//     price: productToEdit?.price || "",
-//     amountType: productToEdit?.amountType || "",
-//     discount: productToEdit?.discount || "",
-//     recommended: productToEdit?.recommended || false,
-//     status: productToEdit?.status || false,
-//   });
+  //   const [newProduct, setNewProduct] = useState({
+  //     name: productToEdit?.name || "",
+  //     description: productToEdit?.description || "",
+  //     tags: productToEdit?.tags || "",
+  //     store: productToEdit?.store || "",
+  //     category: productToEdit?.category || "",
+  //     subCategory: productToEdit?.subCategory || "",
+  //     price: productToEdit?.price || "",
+  //     amountType: productToEdit?.amountType || "",
+  //     discount: productToEdit?.discount || "",
+  //     recommended: productToEdit?.recommended || false,
+  //     status: productToEdit?.status || false,
+  //   });
 
-//  useEffect(() => {
-//    if (productToEdit) {
-//      setNewProduct(
-//       // productToEdit
-//          {
-//           name: productToEdit.name || "",
-//           description: productToEdit.description || "",
-//           tags: productToEdit.tags || "",
-//           store: productToEdit.store || "",
-//           category: productToEdit.category || "",
-//           subCategory: productToEdit.subCategory || "",
-//           price: productToEdit.price || "",
-//           amountType: productToEdit.amountType || "",
-//           discount: productToEdit.discount || "",
-//           recommended: productToEdit.recommended || false,
-//           status: productToEdit.status || false,
-//         }
-//      );
-//    }
-//  }, [productToEdit]);
+  //  useEffect(() => {
+  //    if (productToEdit) {
+  //      setNewProduct(
+  //       // productToEdit
+  //          {
+  //           name: productToEdit.name || "",
+  //           description: productToEdit.description || "",
+  //           tags: productToEdit.tags || "",
+  //           store: productToEdit.store || "",
+  //           category: productToEdit.category || "",
+  //           subCategory: productToEdit.subCategory || "",
+  //           price: productToEdit.price || "",
+  //           amountType: productToEdit.amountType || "",
+  //           discount: productToEdit.discount || "",
+  //           recommended: productToEdit.recommended || false,
+  //           status: productToEdit.status || false,
+  //         }
+  //      );
+  //    }
+  //  }, [productToEdit]);
 
-//   const handleAddOrUpdate = async (e) => {
-//     e.preventDefault();
-//     try {
-//       let res;
-//       if (productToEdit?._id) {
-//         // Update product if _id exists
-//         res = await axios.put(
-//           `http://localhost:8080/api/v1/product/edit/${productToEdit._id}`,
-//           newProduct,
-//           {
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//             withCredentials: true,
-//           }
-//         );
-//       } else {
-//         // Add product if no _id
-//         res = await axios.post(
-//           "http://localhost:8080/api/v1/product/add",
-//           newProduct,
-//           {
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//             withCredentials: true,
-//           }
-//         );
-//       }
+  //   const handleAddOrUpdate = async (e) => {
+  //     e.preventDefault();
+  //     try {
+  //       let res;
+  //       if (productToEdit?._id) {
+  //         // Update product if _id exists
+  //         res = await axios.put(
+  //           `http://localhost:8080/api/v1/product/edit/${productToEdit._id}`,
+  //           newProduct,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             withCredentials: true,
+  //           }
+  //         );
+  //       } else {
+  //         // Add product if no _id
+  //         res = await axios.post(
+  //           "http://localhost:8080/api/v1/product/add",
+  //           newProduct,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             withCredentials: true,
+  //           }
+  //         );
+  //       }
 
-//       if (res.data.success) {
-//         toast.success(res.data.message);
-//       }
+  //       if (res.data.success) {
+  //         toast.success(res.data.message);
+  //       }
 
-//       console.log(res);
-//     } catch (error) {
-//       toast.error(error?.response?.data?.message || "Something went wrong!");
-//       console.log(error);
-//     }
+  //       console.log(res);
+  //     } catch (error) {
+  //       toast.error(error?.response?.data?.message || "Something went wrong!");
+  //       console.log(error);
+  //     }
 
-//     // Reset newProduct after submission
-//     setNewProduct({
-//       name: "",
-//       description: "",
-//       tags: "",
-//       store: "",
-//       category: "",
-//       subCategory: "",
-//       price: "",
-//       amountType: "",
-//       discount: "",
-//       recommended: false,
-//       status: false,
-//     });
-//   };
+  //     // Reset newProduct after submission
+  //     setNewProduct({
+  //       name: "",
+  //       description: "",
+  //       tags: "",
+  //       store: "",
+  //       category: "",
+  //       subCategory: "",
+  //       price: "",
+  //       amountType: "",
+  //       discount: "",
+  //       recommended: false,
+  //       status: false,
+  //     });
+  //   };
+
+  const location = useLocation();
+  const productToEdit = location.state?.product || null;
+  const [imageFile, setImageFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
 
 
-   const location = useLocation();
-   const productToEdit = location.state?.product || null;
+  const [newProduct, setNewProduct] = useState({
+    name: productToEdit?.name || "",
+    description: productToEdit?.description || "",
+    tags: productToEdit?.tags || "",
+    store: productToEdit?.store || "",
+    category: productToEdit?.category || "",
+    subCategory: productToEdit?.subCategory || "",
+    price: productToEdit?.price || "",
+    amountType: productToEdit?.amountType || "",
+    discount: productToEdit?.discount || "",
+    recommended: productToEdit?.recommended || false,
+    status: productToEdit?.status || false,
+    image: productToEdit?.image || "", // Updated to handle image
+    video: productToEdit?.video || "", // Updated to handle video
+  });
 
-   const [newProduct, setNewProduct] = useState({
-     name: productToEdit?.name || "",
-     description: productToEdit?.description || "",
-     tags: productToEdit?.tags || "",
-     store: productToEdit?.store || "",
-     category: productToEdit?.category || "",
-     subCategory: productToEdit?.subCategory || "",
-     price: productToEdit?.price || "",
-     amountType: productToEdit?.amountType || "",
-     discount: productToEdit?.discount || "",
-     recommended: productToEdit?.recommended || false,
-     status: productToEdit?.status || false,
-     image: productToEdit?.image || "", // Updated to handle image
-     video: productToEdit?.video || "", // Updated to handle video
-   });
+  useEffect(() => {
+    if (productToEdit) {
+      setNewProduct({
+        ...newProduct,
+        name: productToEdit.name || "",
+        description: productToEdit.description || "",
+        tags: productToEdit.tags || "",
+        store: productToEdit.store || "",
+        category: productToEdit.category || "",
+        subCategory: productToEdit.subCategory || "",
+        price: productToEdit.price || "",
+        amountType: productToEdit.amountType || "",
+        discount: productToEdit.discount || "",
+        recommended: productToEdit.recommended || false,
+        status: productToEdit.status || false,
+        image: productToEdit.image || "",
+        video: productToEdit.video || "",
+      });
+    }
+  }, [productToEdit]);
 
-   
-
-   useEffect(() => {
-     if (productToEdit) {
-       setNewProduct({
-         ...newProduct,
-         name: productToEdit.name || "",
-         description: productToEdit.description || "",
-         tags: productToEdit.tags || "",
-         store: productToEdit.store || "",
-         category: productToEdit.category || "",
-         subCategory: productToEdit.subCategory || "",
-         price: productToEdit.price || "",
-         amountType: productToEdit.amountType || "",
-         discount: productToEdit.discount || "",
-         recommended: productToEdit.recommended || false,
-         status: productToEdit.status || false,
-         image: productToEdit.image || "",
-         video: productToEdit.video || "",
-       });
-     }
-   }, [productToEdit]);
-
-   // Upload image or video to Cloudinary
+  // Upload image or video to Cloudinary
   //  const uploadToCloudinary = async (file, type) => {
   //    if (!file) return null;
   //    const formData = new FormData();
@@ -187,10 +187,10 @@ function AddNewItem() {
   //    }
   //  };
 
-   const handleAddOrUpdate = async (e) => {
-     e.preventDefault();
+  const handleAddOrUpdate = async (e) => {
+    e.preventDefault();
 
-     // Upload image if selected
+    // Upload image if selected
     //  if (imageFile) {
     //    const imageUrl = await uploadToCloudinary(imageFile, "Image");
     //    if (imageUrl) {
@@ -205,60 +205,70 @@ function AddNewItem() {
     //      setNewProduct((prev) => ({ ...prev, video: videoUrl }));
     //    }
     //  }
+    try {
+      const formData = new FormData();
+      for (const key in newProduct) {
+        formData.append(key, newProduct[key]);
+      }
 
-     try {
-       let res;
-       if (productToEdit?._id) {
-         // Update product
-         res = await axios.put(
-           `http://localhost:8080/api/v1/products/edit/${productToEdit._id}`,
-           newProduct,
-           {
-             headers: { "Content-Type": "application/json" },
-             withCredentials: true,
-           }
-         );
-       } else {
-         // Add new product
-         res = await axios.post(
-           "http://localhost:8080/api/v1/products/add",
-           newProduct,
-           {
-             headers: { "Content-Type": "application/json" },
-             withCredentials: true,
-           }
-         );
-       }
+      // Add image file if selected
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
 
-       if (res.data.success) {
-         toast.success(res.data.message);
-       }
-     } catch (error) {
-       toast.error(error?.response?.data?.message || "Something went wrong!");
-       console.log(error);
-     }
+      // Add video file if selected
+      if (videoFile) {
+        formData.append("video", videoFile);
+      }
 
-     // Reset form after submission
-     setNewProduct({
-       name: "",
-       description: "",
-       tags: "",
-       store: "",
-       category: "",
-       subCategory: "",
-       price: "",
-       amountType: "",
-       discount: "",
-       recommended: false,
-       status: false,
-       image: "",
-       video: "",
-     });
-    
-   };
+      let res;
+      if (productToEdit?._id) {
+        // Update product
+        res = await axios.put(
+          `http://localhost:8080/api/v1/products/edit/${productToEdit._id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
+          }
+        );
+      } else {
+        // Add new product
+        res = await axios.post(
+          "http://localhost:8080/api/v1/products/add",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
+          }
+        );
+      }
 
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.log(error);
+    }
 
-
+    // Reset form after submission
+    setNewProduct({
+      name: "",
+      description: "",
+      tags: "",
+      store: "",
+      category: "",
+      subCategory: "",
+      price: "",
+      amountType: "",
+      discount: "",
+      recommended: false,
+      status: false,
+      image: "",
+      video: "",
+    });
+  };
 
   return (
     <>
@@ -278,7 +288,7 @@ function AddNewItem() {
             className="main-add-form"
             encType="multipart/form-data"
             onSubmit={(e) => {
-              handleAddOrUpdate(productToEdit?._id,);
+              handleAddOrUpdate(productToEdit?._id);
             }}
           >
             <div className="add-form-section">
@@ -343,13 +353,7 @@ function AddNewItem() {
                       <input
                         type="file"
                         accept="image/*"
-                        value={newProduct.image}
-                        onChange={(e) =>
-                          setNewProduct({
-                            ...newProduct,
-                            image: e.target.files[0],
-                          })
-                        }
+                        onChange={(e) => setImageFile(e.target.files[0])}
                       />
                     </div>
                   </div>
@@ -363,14 +367,14 @@ function AddNewItem() {
                       <input
                         type="file"
                         accept="video/*"
-                        // onChange={(e) => setVideoFile(e.target.files[0])}
-                        value={newProduct.video}
-                        onChange={(e) =>
-                          setNewProduct({
-                            ...newProduct,
-                            video: e.target.files[0],
-                          })
-                        }
+                        onChange={(e) => setVideoFile(e.target.files[0])}
+
+                        // onChange={(e) =>
+                        //   setNewProduct({
+                        //     ...newProduct,
+                        //     video: e.target.files[0],
+                        //   })
+                        // }
                       />
                     </div>
                   </div>

@@ -225,7 +225,25 @@ const ProductList = () => {
                         products.map((product, index) => (
                           <tr key={product._id}>
                             <td>{index + 1}</td>
-                            <td>{product.name}</td>
+                            <td>
+                              {product.imageUrl ? (
+                                <img
+                                  src={product.imageUrl}
+                                  alt={product.name}
+                                  style={{
+                                    width: "30px",
+                                    height: "30px",
+                                    borderRadius: "3px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              ) : (
+                                <span className="no-image">No Image</span>
+                              )}
+                              <span className="product-name">
+                                {product.name}
+                              </span>
+                            </td>
                             <td>{product.description}</td>
                             <td>{product.category}</td>
                             <td>${product.price}</td>
