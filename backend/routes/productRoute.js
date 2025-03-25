@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../middleware/multer.middleware.js";
 import {
   addItem,
   getAllItems,
@@ -8,9 +9,27 @@ import {
 
 const router = express.Router();
 
-router.post("/add", addItem); // Add new item
+// Upload Image and Video Middleware
+router.post(
+  "/add",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  addItem
+); // Add new item with image & video
+
 router.get("/all", getAllItems); // Get all items
-router.put("/edit/:id", editItem); // Edit item by ID
+
+router.put(
+  "/edit/:id",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  editItem
+); // Edit item by ID with image & video
+
 router.delete("/delete/:id", deleteItem); // Delete item by ID
 
 export default router;

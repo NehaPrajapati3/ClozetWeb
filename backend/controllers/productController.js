@@ -1,6 +1,8 @@
 import { Product } from "../models/product.model.js";
+import cloudinary from "../config/cloudinary.js";
+import fs from "fs";
 
-// Add Item API
+// Add Item API with Image and Video Upload
 export const addItem = async (req, res) => {
   try {
     const {
@@ -16,7 +18,7 @@ export const addItem = async (req, res) => {
       status,
     } = req.body;
 
-   
+    // Check if product name already exists
     let gotProduct = await Product.findOne({ name });
     if (gotProduct) {
       return res.status(400).json({
@@ -25,11 +27,40 @@ export const addItem = async (req, res) => {
       });
     }
 
-    
+    let imageUrl = "";
+    let videoUrl = "";
+
+    console.log("Files received:", req.files);
+
+
+    // Upload image if available
+
+    if (req.files["image"]) {
+      const imagePath = req.files["image"][0].path;
+      const imageResult = await cloudinary.uploader.upload(imagePath, {
+        folder: "uploads/images",
+        resource_type: "image",
+      });
+      imageUrl = imageResult.secure_url;
+      fs.unlinkSync(imagePath); // Delete local file after upload
+    }
+
+    // Upload video if available
+    if (req.files["video"]) {
+      const videoPath = req.files["video"][0].path;
+      const videoResult = await cloudinary.uploader.upload(videoPath, {
+        folder: "uploads/videos",
+        resource_type: "video",
+      });
+      videoUrl = videoResult.secure_url;
+      fs.unlinkSync(videoPath); // Delete local file after upload
+    }
+
+    // Create new product
     const newItem = await Product.create({
       name,
       description,
-      tags,
+      tags: tags ? tags.split(",") : [],
       store,
       category,
       price,
@@ -37,6 +68,8 @@ export const addItem = async (req, res) => {
       discount,
       recommended,
       status,
+      imageUrl,
+      videoUrl,
     });
 
     return res.status(201).json({
@@ -56,7 +89,7 @@ export const addItem = async (req, res) => {
 // Get All Items API
 export const getAllItems = async (req, res) => {
   try {
-    const allItems = await Product.find(); 
+    const allItems = await Product.find();
     return res.status(200).json({
       success: true,
       items: allItems,
@@ -70,25 +103,69 @@ export const getAllItems = async (req, res) => {
   }
 };
 
-// Edit Item API
+// Edit Item API with Image and Video Upload
 export const editItem = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-   // console.log(`Update data is ${updateData}`)
 
-    // Find and update item by ID
-    const updatedItem = await Product.findByIdAndUpdate(id, updateData, {
-      new: true, // Return updated item
-      runValidators: true, // Run validators on update
-    });
-
+    let updatedItem = await Product.findById(id);
     if (!updatedItem) {
       return res.status(404).json({
         message: "Item not found.",
         success: false,
       });
     }
+
+    // Upload new image if available
+    if (req.files["image"]) {
+      // Delete old image from Cloudinary
+      if (updatedItem.imageUrl) {
+        const oldImagePublicId = updatedItem.imageUrl
+          .split("/")
+          .pop()
+          .split(".")[0];
+        await cloudinary.uploader.destroy(`uploads/images/${oldImagePublicId}`);
+      }
+
+      // Upload new image
+      const imagePath = req.files["image"][0].path;
+      const imageResult = await cloudinary.uploader.upload(imagePath, {
+        folder: "uploads/images",
+        resource_type: "image",
+      });
+      updateData.imageUrl = imageResult.secure_url;
+      fs.unlinkSync(imagePath);
+    }
+
+    // Upload new video if available
+    if (req.files["video"]) {
+      // Delete old video from Cloudinary
+      if (updatedItem.videoUrl) {
+        const oldVideoPublicId = updatedItem.videoUrl
+          .split("/")
+          .pop()
+          .split(".")[0];
+        await cloudinary.uploader.destroy(`uploads/videos/${oldVideoPublicId}`, {
+          resource_type: "video",
+        });
+      }
+
+      // Upload new video
+      const videoPath = req.files["video"][0].path;
+      const videoResult = await cloudinary.uploader.upload(videoPath, {
+        folder: "uploads/videos",
+        resource_type: "video",
+      });
+      updateData.videoUrl = videoResult.secure_url;
+      fs.unlinkSync(videoPath);
+    }
+
+    // Update product with new data
+    updatedItem = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     return res.status(200).json({
       message: "Item updated successfully.",

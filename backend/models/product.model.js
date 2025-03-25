@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productModel = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -10,6 +10,14 @@ const productModel = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+    },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
+    videoUrl: {
+      type: String,
+      default: "",
     },
     tags: {
       type: [String],
@@ -31,20 +39,24 @@ const productModel = new mongoose.Schema(
     discountType: {
       type: String,
       enum: ["percentage", "amount"],
+      default: "percentage",
     },
     discount: {
       type: Number,
-      required: true,
+      default: 0,
     },
     recommended: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     status: {
       type: Boolean,
-      required: true,
+      default: true,
     },
   },
   { timestamps: true }
 );
-export const Product = mongoose.model("Product", productModel);
+
+export const Product = mongoose.model("Product", productSchema);
+
+

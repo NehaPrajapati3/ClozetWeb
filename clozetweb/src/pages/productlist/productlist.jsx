@@ -75,7 +75,7 @@ const ProductList = () => {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8080/api/v1/product/delete/${id}`
+        `http://localhost:8080/api/v1/products/delete/${id}`
       );
       if (res?.data?.success) {
         toast.success(res.data.message);

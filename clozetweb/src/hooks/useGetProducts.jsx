@@ -10,7 +10,7 @@ function useGetProducts() {
     const fetchProducts = async () => {
       try {
         axios.defaults.withCredentials = true;
-        const res = await axios.get(`http://localhost:8080/api/v1/product/all`);
+        const res = await axios.get(`http://localhost:8080/api/v1/products/all`);
         console.log("Fetched response is",res)
         dispatch(setProducts(res.data.items));
         console.log("Dispatched setProducts with:", res.data.items);
