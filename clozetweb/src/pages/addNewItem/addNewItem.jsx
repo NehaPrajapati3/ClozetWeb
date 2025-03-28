@@ -160,51 +160,11 @@ function AddNewItem() {
     }
   }, [productToEdit]);
 
-  // Upload image or video to Cloudinary
-  //  const uploadToCloudinary = async (file, type) => {
-  //    if (!file) return null;
-  //    const formData = new FormData();
-  //    formData.append("file", file);
-  //    formData.append("upload_preset", "clozetweb"); // Use your Cloudinary upload preset
-
-  //    try {
-  //      const res = await axios.post(
-  //        "https://api.cloudinary.com/v1_1/dpc49fmcr/upload", // Replace with your Cloudinary cloud name
-  //        formData
-  //      );
-
-  //      if (res.data.secure_url) {
-  //        toast.success(`${type} uploaded successfully!`);
-  //        return res.data.secure_url;
-  //      } else {
-  //        toast.error(`Failed to upload ${type}`);
-  //        return null;
-  //      }
-  //    } catch (error) {
-  //      toast.error(`Error uploading ${type}`);
-  //      console.error(error);
-  //      return null;
-  //    }
-  //  };
-
+ 
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 
-    // Upload image if selected
-    //  if (imageFile) {
-    //    const imageUrl = await uploadToCloudinary(imageFile, "Image");
-    //    if (imageUrl) {
-    //      setNewProduct((prev) => ({ ...prev, image: imageUrl }));
-    //    }
-    //  }
-
-    //  // Upload video if selected
-    //  if (videoFile) {
-    //    const videoUrl = await uploadToCloudinary(videoFile, "Video");
-    //    if (videoUrl) {
-    //      setNewProduct((prev) => ({ ...prev, video: videoUrl }));
-    //    }
-    //  }
+   
     try {
       const formData = new FormData();
       for (const key in newProduct) {

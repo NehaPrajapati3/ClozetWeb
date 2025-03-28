@@ -271,6 +271,13 @@
     object-fit: cover;
     border-radius: 5px;
  }
+ .title-btn-box .subt-btn{
+    width: 100px;
+    height: 40px;
+    background-color: #aba4a4;
+    /* color: #fff; */
+
+}
  
  
  

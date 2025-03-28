@@ -38,7 +38,7 @@ export const addItem = async (req, res) => {
     if (req.files["image"]) {
       const imagePath = req.files["image"][0].path;
       const imageResult = await cloudinary.uploader.upload(imagePath, {
-        folder: "uploads/images",
+        folder: "uploads/products/images",
         resource_type: "image",
       });
       imageUrl = imageResult.secure_url;
@@ -49,7 +49,7 @@ export const addItem = async (req, res) => {
     if (req.files["video"]) {
       const videoPath = req.files["video"][0].path;
       const videoResult = await cloudinary.uploader.upload(videoPath, {
-        folder: "uploads/videos",
+        folder: "uploads/products/productsvideos",
         resource_type: "video",
       });
       videoUrl = videoResult.secure_url;
@@ -125,13 +125,15 @@ export const editItem = async (req, res) => {
           .split("/")
           .pop()
           .split(".")[0];
-        await cloudinary.uploader.destroy(`uploads/images/${oldImagePublicId}`);
+        await cloudinary.uploader.destroy(
+          `uploads/products/images/${oldImagePublicId}`
+        );
       }
 
       // Upload new image
       const imagePath = req.files["image"][0].path;
       const imageResult = await cloudinary.uploader.upload(imagePath, {
-        folder: "uploads/images",
+        folder: "uploads/products/images",
         resource_type: "image",
       });
       updateData.imageUrl = imageResult.secure_url;
@@ -146,15 +148,18 @@ export const editItem = async (req, res) => {
           .split("/")
           .pop()
           .split(".")[0];
-        await cloudinary.uploader.destroy(`uploads/videos/${oldVideoPublicId}`, {
-          resource_type: "video",
-        });
+        await cloudinary.uploader.destroy(
+          `uploads/products/videos/${oldVideoPublicId}`,
+          {
+            resource_type: "video",
+          }
+        );
       }
 
       // Upload new video
       const videoPath = req.files["video"][0].path;
       const videoResult = await cloudinary.uploader.upload(videoPath, {
-        folder: "uploads/videos",
+        folder: "uploads/products/videos",
         resource_type: "video",
       });
       updateData.videoUrl = videoResult.secure_url;
@@ -182,11 +187,12 @@ export const editItem = async (req, res) => {
 };
 
 
-// Delete Item API
+// Delete Item API with Image and Video Deletion
 export const deleteItem = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Find item by ID to get image and video URLs
     const deletedItem = await Product.findByIdAndDelete(id);
 
     if (!deletedItem) {
@@ -194,6 +200,31 @@ export const deleteItem = async (req, res) => {
         message: "Item not found.",
         success: false,
       });
+    }
+
+    // Delete image from Cloudinary if exists
+    if (deletedItem.imageUrl) {
+      const oldImagePublicId = deletedItem.imageUrl
+        .split("/")
+        .pop()
+        .split(".")[0];
+      await cloudinary.uploader.destroy(
+        `uploads/products/images/${oldImagePublicId}`
+      );
+    }
+
+    // Delete video from Cloudinary if exists
+    if (deletedItem.videoUrl) {
+      const oldVideoPublicId = deletedItem.videoUrl
+        .split("/")
+        .pop()
+        .split(".")[0];
+      await cloudinary.uploader.destroy(
+        `uploads/products/videos/${oldVideoPublicId}`,
+        {
+          resource_type: "video",
+        }
+      );
     }
 
     return res.status(200).json({

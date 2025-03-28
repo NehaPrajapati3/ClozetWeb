@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
 import productRoutes from "./routes/productRoute.js";
 import orderRoute from "./routes/orderRoute.js";
+import storeRoute from "./routes/storeRoute.js";
 
 import cors from "cors";
 
@@ -31,6 +32,7 @@ app.use(cors(corsOption))
 
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/order", orderRoute);
+app.use("/api/v1/store", storeRoute);
 
 
 app.listen(PORT, ()=>{

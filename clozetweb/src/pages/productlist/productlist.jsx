@@ -211,6 +211,7 @@ const ProductList = () => {
                     <thead>
                       <tr className="text-sm">
                         <th className="text-sm">SI</th>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Category</th>
@@ -231,8 +232,8 @@ const ProductList = () => {
                                   src={product.imageUrl}
                                   alt={product.name}
                                   style={{
-                                    width: "30px",
-                                    height: "30px",
+                                    width: "50px",
+                                    height: "50px",
                                     borderRadius: "3px",
                                     objectFit: "cover",
                                   }}
@@ -240,10 +241,8 @@ const ProductList = () => {
                               ) : (
                                 <span className="no-image">No Image</span>
                               )}
-                              <span className="product-name">
-                                {product.name}
-                              </span>
                             </td>
+                            <td>{product.name}</td>
                             <td>{product.description}</td>
                             <td>{product.category}</td>
                             <td>${product.price}</td>
