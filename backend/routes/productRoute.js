@@ -6,12 +6,15 @@ import {
   editItem,
   deleteItem,
 } from "../controllers/productController.js";
+import isUserAuthenticated from "../middleware/isUserAuthenticated.js";
 
 const router = express.Router();
 
 // Upload Image and Video Middleware
 router.post(
   "/add",
+    isUserAuthenticated,
+  
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "video", maxCount: 1 },
@@ -19,7 +22,8 @@ router.post(
   addItem
 ); // Add new item with image & video
 
-router.get("/all", getAllItems); // Get all items
+router.get("/all",  isUserAuthenticated,
+ getAllItems); // Get all items
 
 router.put(
   "/edit/:id",
@@ -30,6 +34,6 @@ router.put(
   editItem
 ); // Edit item by ID with image & video
 
-router.delete("/delete/:id", deleteItem); // Delete item by ID
+router.delete("/delete/:id", isUserAuthenticated, deleteItem); // Delete item by ID
 
 export default router;

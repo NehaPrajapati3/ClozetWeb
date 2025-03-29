@@ -169,6 +169,7 @@ const MyShop = () => {
                 <div className="up-img">
                   <div className="img-real">
                     <input
+                      name="logo"
                       type="file"
                       accept="image/*"
                       onChange={(e) => setLogoFile(e.target.files[0])}
@@ -185,6 +186,7 @@ const MyShop = () => {
                 <div className="up-img">
                   <div className="img-real">
                     <input
+                      name="coverPhoto"
                       type="file"
                       accept="image/*"
                       onChange={(e) => setCoverPhotoFile(e.target.files[0])}

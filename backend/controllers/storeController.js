@@ -1,19 +1,11 @@
 import { Store } from "../models/store.model.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
-import path from "path";
-
 
 // Add Item API with Image and Video Upload
 export const addStore = async (req, res) => {
   try {
-    const {
-      name,
-      address,
-      phoneNo,
-    
-    
-    } = req.body;
+    const { name, address, phoneNo } = req.body;
 
     // Check if product name already exists
     let gotStore = await Store.findOne({ name });
@@ -28,7 +20,6 @@ export const addStore = async (req, res) => {
     let coverPhotoUrl = "";
 
     console.log("Files received:", req.files);
-
 
     // Upload logo if available
 
@@ -51,11 +42,10 @@ export const addStore = async (req, res) => {
         resource_type: "image",
       });
       coverPhotoUrl = imageResult.secure_url;
-      console.log(`cover photo url : ${coverPhotoUrl}`);
+      //console.log(`cover photo url : ${coverPhotoUrl}`);
       fs.unlinkSync(imagePath); // Delete local file after upload
     }
 
-   
     // Create new store
     const newStore = await Store.create({
       name,
@@ -111,7 +101,7 @@ export const editStore = async (req, res) => {
     }
 
     // Upload new logo if available
-    if (req.files["image"]) {
+    if (req.files["logo"]) {
       // Delete old logo from Cloudinary
       if (updatedItem.logoUrl) {
         const oldImagePublicId = updatedItem.logoUrl
@@ -124,7 +114,7 @@ export const editStore = async (req, res) => {
       }
 
       // Upload new logo
-      const imagePath = req.files["image"][0].path;
+      const imagePath = req.files["logo"][0].path;
       const imageResult = await cloudinary.uploader.upload(imagePath, {
         folder: "uploads/stores/logos",
         resource_type: "image",
@@ -134,7 +124,7 @@ export const editStore = async (req, res) => {
     }
 
     // Upload new cover photo if available
-    if (req.files["image"]) {
+    if (req.files["coverPhoto"]) {
       // Delete old cover photo from Cloudinary
       if (updatedItem.coverPhotoUrl) {
         const oldImagePublicId = updatedItem.coverPhotoUrl
@@ -147,7 +137,7 @@ export const editStore = async (req, res) => {
       }
 
       // Upload new cover photo
-      const imagePath = req.files["image"][0].path;
+      const imagePath = req.files["coverPhoto"][0].path;
       const imageResult = await cloudinary.uploader.upload(imagePath, {
         folder: "uploads/stores/coverPhotos",
         resource_type: "image",
@@ -156,8 +146,6 @@ export const editStore = async (req, res) => {
       fs.unlinkSync(imagePath);
     }
 
-   
-    
     // Update product with new data
     updatedItem = await Store.findByIdAndUpdate(id, updateData, {
       new: true,
@@ -178,8 +166,7 @@ export const editStore = async (req, res) => {
   }
 };
 
-
-// Delete Item API 
+// Delete Item API
 export const deleteStore = async (req, res) => {
   try {
     const { id } = req.params;
@@ -213,8 +200,6 @@ export const deleteStore = async (req, res) => {
         `uploads/stores/coverPhotos/${oldImagePublicId}`
       );
     }
-
-   
 
     return res.status(200).json({
       message: "Store deleted successfully.",

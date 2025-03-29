@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
+import userRoute from "./routes/userRoute.js";
 import productRoutes from "./routes/productRoute.js";
 import orderRoute from "./routes/orderRoute.js";
 import storeRoute from "./routes/storeRoute.js";
@@ -30,6 +31,7 @@ app.use(cors(corsOption))
 
 // Routes
 
+app.use("/api/v1/user", userRoute);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/store", storeRoute);
