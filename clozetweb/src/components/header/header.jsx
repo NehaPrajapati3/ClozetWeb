@@ -8,7 +8,9 @@ import { Divider, Menu, MenuItem } from "@mui/material";
 import { MyContext } from "../../pages/home/home";
 import { Link, useNavigate, } from "react-router-dom";
 import {useDispatch} from 'react-redux'
-import { logout } from "../useFiles";
+import { logout } from "../../redux/authSlice";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Header = () => { 
     const navigate = useNavigate();
@@ -35,10 +37,27 @@ const Header = () => {
         setMyAccountDrop(null);
     };
 
-    const handleLogout = ()=>{
-      navigate('/login')
-      dispatch(logout())
-      console.log("user loged out succesfully")
+    const handleLogout = async ()=>{
+       try {
+      //console.log("Inside logout");
+
+      const res = await axios.get(
+        "http://localhost:8080/api/v1/user/logoutUser"
+      );
+     // console.log("Inside logout after res");
+     // console.log(`Res is ${res}`);
+
+
+      navigate('/login');
+      toast.success(res.data.message);
+      dispatch(logout(null))
+      console.log("user loged out succesfully");
+      
+    } catch (error) {
+      console.log(error)
+    }
+     
+     
     }
 
 

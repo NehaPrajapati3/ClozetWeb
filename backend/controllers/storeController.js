@@ -6,6 +6,10 @@ import fs from "fs";
 export const addStore = async (req, res) => {
   try {
     const { name, address, phoneNo } = req.body;
+    const createdBy = req.id;
+    console.log("Created by:", req.id);
+
+ 
 
     // Check if product name already exists
     let gotStore = await Store.findOne({ name });
@@ -53,6 +57,7 @@ export const addStore = async (req, res) => {
       phoneNo,
       logoUrl,
       coverPhotoUrl,
+      createdBy,
     });
 
     return res.status(201).json({

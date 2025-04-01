@@ -75,6 +75,7 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = (req, res) => {
+  console.log("Inside log out user")
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out succesfully",

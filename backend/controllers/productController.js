@@ -17,6 +17,7 @@ export const addItem = async (req, res) => {
       recommended,
       status,
     } = req.body;
+    const userId = req.id
 
     // Check if product name already exists
     let gotProduct = await Product.findOne({ name });
@@ -70,6 +71,7 @@ export const addItem = async (req, res) => {
       status,
       imageUrl,
       videoUrl,
+      userId,
     });
 
     return res.status(201).json({
@@ -89,7 +91,8 @@ export const addItem = async (req, res) => {
 // Get All Items API
 export const getAllItems = async (req, res) => {
   try {
-    const allItems = await Product.find();
+    const userId = req.id;
+    const allItems = await Product.find({ userId: userId });
     return res.status(200).json({
       success: true,
       items: allItems,
