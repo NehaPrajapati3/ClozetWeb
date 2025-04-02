@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import productReducer from "./productSlice";
 import authReducer from "./authSlice";
 import orderReducer from "./orderSlice";
+import employeeReducer from "./employeeSlice";
 import {
   persistReducer,
   FLUSH,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   auth: authReducer,
   order: orderReducer,
+  employee: employeeReducer
  
 });
 

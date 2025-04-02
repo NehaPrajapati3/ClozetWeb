@@ -17,3 +17,10 @@ export const selectOrders = createSelector(
   (order) => order.orders || [] // <-- Fallback to empty array
 );
 
+const selectEmployeeState = (state) => state.order || { orders: [] };
+
+export const selectEmployees = createSelector(
+  [selectEmployeeState],
+  (employee) => employee.employees || [] 
+);
+

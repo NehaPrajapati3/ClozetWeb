@@ -37,120 +37,124 @@ import AddItem from "./pages/addNewItem/addNewItem.jsx";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element:  <Home/>,
-    children:[
+    path: "/",
+    element: (
+      <AuthLayout>
+        <Home />
+      </AuthLayout>
+    ),
+    children: [
       {
-        path: '/dashboard',
-        element:  <Dashboard/>,
+        path: "/dashboard",
+        element: <Dashboard />,
       },
       {
-        path: '/transection',
-        element:  <TransectionReport/>,
+        path: "/transection",
+        element: <TransectionReport />,
       },
       {
-        path: '/storereport',
-        element:  <StoresReport/>,
+        path: "/storereport",
+        element: <StoresReport />,
       },
       {
-        path: '/expensereport',
-        element:  <ExpenseReport/>,
+        path: "/expensereport",
+        element: <ExpenseReport />,
       },
       {
-        path: '/employeerole',
-        element:  <EmployeeRole/>,
+        path: "/employeerole",
+        element: <EmployeeRole />,
       },
       {
-        path: '/addemployee',
-        element:  <AddNewEmployee/>,
+        path: "/addemployee",
+        element: <AddNewEmployee />,
       },
       {
-        path: '/employeelist',
-        element:  <EmployeeList/>,
+        path: "/employeelist",
+        element: <EmployeeList />,
       },
       {
-        path: '/storeconfig',
-        element:  <StoreConfig/>,
+        path: "/storeconfig",
+        element: <StoreConfig />,
       },
       {
-        path: '/myshop',
-        element:  <MyShop/>,
+        path: "/myshop",
+        element: <MyShop />,
       },
       {
-        path: '/mywallet',
-        element:  <MyWallet/>,
+        path: "/mywallet",
+        element: <MyWallet />,
       },
       {
-        path: '/bankinfo',
-        element:  <BankInfo/>,
+        path: "/bankinfo",
+        element: <BankInfo />,
       },
       {
-        path: '/withdrawrequest',
-        element:  <Withdraw/>,
+        path: "/withdrawrequest",
+        element: <Withdraw />,
       },
       {
-        path: '/collectcash',
-        element:  <CollectCash/>,
+        path: "/collectcash",
+        element: <CollectCash />,
       },
       {
-        path: '/deliverypayment',
-        element:  <DeliveryEarn/>,
+        path: "/deliverypayment",
+        element: <DeliveryEarn />,
       },
       {
-        path: '/coupons',
-        element:  <Coupons/>,
+        path: "/coupons",
+        element: <Coupons />,
       },
       {
-        path: '/banners',
-        element:  <Banners/>,
+        path: "/banners",
+        element: <Banners />,
       },
       {
-        path: '/allorder',
-        element:  <AllOrder/>,
+        path: "/allorder",
+        element: <AllOrder />,
       },
       {
-        path: '/newsale',
-        element:  <Newsale/>,
+        path: "/newsale",
+        element: <Newsale />,
       },
       {
-        path: '/itemList',
-        element:  <ProductList/>,
+        path: "/itemList",
+        element: <ProductList />,
       },
       {
-        path: '/productGallery',
-        element:  <ProductGallery/>,
+        path: "/productGallery",
+        element: <ProductGallery />,
       },
       {
-        path: '/bulkImport',
-        element:  <BulkImport/>,
+        path: "/bulkImport",
+        element: <BulkImport />,
       },
       {
-        path: '/bulkExport',
-        element:  <BulkExport/>,
+        path: "/bulkExport",
+        element: <BulkExport />,
       },
       {
-        path: '/addItem',
-        element:  <AddItem/>,
+        path: "/addItem",
+        element: <AddItem />,
       },
-    ]
+    ],
   },
   {
-    path: '/login',
+    path: "/login",
     element: (
-      <AuthLayout authentication = {false}>
-        <Login/>
+      <AuthLayout authentication={false}>
+        <Login />
       </AuthLayout>
-    )
+    ),
   },
   {
-    path: '/register',
+    path: "/register",
     element: (
-      <AuthLayout authentication = {false}>
-        <SignUp/>
+      <AuthLayout authentication={false}>
+        <SignUp />
       </AuthLayout>
-    )
+    ),
   },
-])
+]);
 
 
 
