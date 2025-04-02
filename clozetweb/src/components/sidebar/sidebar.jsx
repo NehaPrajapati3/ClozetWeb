@@ -60,7 +60,7 @@ const isOpenDropmenu = (index)=>{
                     <Link to={'/newsale'}>
                     <Button  >
                         <span className="side-icons"><PiSailboatFill/></span>
-                        New Sale
+                       Sales
                         <span className="arrow"><IoIosArrowForward/></span>
                       </Button>
                     </Link>  

@@ -170,11 +170,12 @@
 }
 .cart1 .confirem-info{
     width: 100%;
-    height: 40px;
+    height: 70px;
     /* background-color: chartreuse; */
     display: flex;
     justify-content: start;
     align-items: center;
+    margin-top:15px;
     
 }
 
@@ -195,10 +196,11 @@
 }
 .cart2 .confirem-icon{
     width: 100%;
-    height: 40px;
+    height: 70px;
     /* background-color: #dbb872; */
     display: flex;
     justify-content: space-between;
+    
 
 }
 .confirem-icon .zero{
@@ -231,6 +233,7 @@
     justify-content: start;
     align-items: center;
     
+    
 }
 
 .cart2 .confirem-info  h4{
@@ -254,6 +257,7 @@
     /* background-color: #dbb872; */
     display: flex;
     justify-content: space-between;
+   
 
 }
 .confirem-icon .zero{
@@ -280,11 +284,12 @@
 }
 .cart3 .confirem-info{
     width: 100%;
-    height: 40px;
+    height: 70px;
     /* background-color: chartreuse; */
     display: flex;
     justify-content: start;
     align-items: center;
+    margin-top:15px;
     
 }
 
@@ -335,11 +340,12 @@
 }
 .cart4 .confirem-info{
     width: 100%;
-    height: 40px;
+    height: 70px;
     /* background-color: chartreuse; */
     display: flex;
     justify-content: start;
     align-items: center;
+    margin-top:15px;
     
 }
 

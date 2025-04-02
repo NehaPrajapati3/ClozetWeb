@@ -51,6 +51,7 @@ export const getAllOrders = async (req, res) => {
 export const editOrder = async (req, res) => {
   try {
     const { id } = req.params;
+   
     const updateData = req.body;
    // console.log(`Update data is ${updateData}`)
 

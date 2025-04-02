@@ -11,7 +11,15 @@ const orderModel = new mongoose.Schema(
       required: true,
     },
     orderStatus: {
-      type: Boolean,
+      type: String,
+      enum: [
+        "Confirmed",
+        "Ready for Delivery",
+        "Item on the Way",
+        "Delivered",
+        "Refunded",
+        "Scheduled",
+      ],
       required: true,
     },
   },

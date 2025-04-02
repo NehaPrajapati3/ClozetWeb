@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 import { selectOrders } from "../files";
 import { useDispatch } from "react-redux";
 import { setOrders } from "../../redux/orderSlice";
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
+import axios from "axios";
 
 
 const AllOrder = () => {
@@ -20,6 +21,42 @@ const AllOrder = () => {
 
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
+
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [orderStatuses, setOrderStatuses] = useState(
+    orders.reduce(
+      (acc, order) => ({ ...acc, [order._id]: order.orderStatus }),
+      {}
+    )
+  );
+
+ const handleStatusChange = async (orderId, newStatus) => {
+   console.log(`OrderId: ${orderId}`);
+   try {
+     const response = await axios.put(
+       `http://localhost:8080/api/v1/order/edit/${orderId}`,
+       { orderStatus: newStatus }, 
+       {
+         headers: {
+           "Content-Type": "application/json",
+         },
+         withCredentials: true,
+       }
+     );
+
+     if (response.data.success) {
+       setOrderStatuses((prev) => ({ ...prev, [orderId]: newStatus }));
+       setOpenDropdown(null); // Close dropdown after selection
+       toast.success(`Order ${orderId} status changed to: ${newStatus}`);
+     } else {
+       toast.error("Failed to update order status.");
+     }
+   } catch (error) {
+     console.error("Error updating order status:", error);
+     toast.error("Error updating order status.");
+   }
+ };
+
 
   const searchSubmitHandler = (e) => {
     e.preventDefault();
@@ -105,13 +142,52 @@ const AllOrder = () => {
                           <td>{order.createdAt}</td>
                           <td>{order.customerInformation}</td>
                           <td>{order.totalAmount}</td>
-                          <td>
-                            <Switch checked={order.orderStatus} />
-                          </td>
-                          <td className="ac-box">
-                            <Button className="hipen">
+                          <td>{orderStatuses[order._id]}</td>
+                          <td
+                            className="ac-box"
+                            style={{ position: "relative" }}
+                          >
+                            <Button
+                              className="hipen"
+                              onClick={() =>
+                                setOpenDropdown(
+                                  openDropdown === order._id ? null : order._id
+                                )
+                              }
+                            >
                               <LuEye />
                             </Button>
+                            {openDropdown === order._id && (
+                              <select
+                                value={orderStatuses[order._id]}
+                                onChange={(e) =>
+                                  handleStatusChange(order._id, e.target.value)
+                                }
+                                style={{
+                                  position: "absolute",
+                                  top: "100%",
+                                  left: 0,
+                                  background: "#fff",
+                                  border: "1px solid #ccc",
+                                  borderRadius: "5px",
+                                  padding: "5px",
+                                  marginRight: "40px",
+                                }}
+                              >
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Ready for Delivery">
+                                  Ready for Delivery
+                                </option>
+                                <option value="Item on the Way">
+                                  Item on the Way
+                                </option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Refunded">Refunded</option>
+                                <option value="Scheduled">
+                                  Scheduled
+                                </option>
+                              </select>
+                            )}
                           </td>
                         </tr>
                       ))

@@ -167,6 +167,9 @@
     background-color: #cfdad0;
     border-radius: 10px;
     padding: 10px;
+    display: flex;
+    flex-direction:column;
+
 }
 .cart3 .confirem-icon{
     width: 100%;
@@ -203,7 +206,7 @@
 .cart3 .confirem-info .confirem-count h2{
     font-size: 1.7em;
     font-weight: 500;
-    color:#2cfa4b;
+    color:#e72121;
 
 }
 .cart3 .confirem-info .confirem-count p{
@@ -277,6 +280,7 @@
     display: flex;
     justify-content: space-between;
     border-radius: 10px;
+    
 
 }
 .cart-box2 .cart-d1 .dlinfo{
