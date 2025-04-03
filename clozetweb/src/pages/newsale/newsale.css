@@ -161,6 +161,28 @@
     box-shadow: 0px 0px 1px 2px #e1dddd;
 }
 
+.see-products .main-or-table{
+    width: 100%;
+    height: 510px;
+    /* background-color: #fff; */
+    overflow-y: scroll;
+}
+.see-products .main-or-table::-webkit-scrollbar{
+    width: 0px;
+}
+.see-products .main-or-table table tbody tr td{
+    padding: 10px;
+    color: #232929;
+}
+.see-products .main-or-table table thead{
+    height: 55px;
+    position: sticky;
+    top: 0px;
+    background-color: #d4e4f3;   
+    z-index: 3;
+    color: #232929;
+}
+
 /*  billing section */
 
 .newsale .billing-right{

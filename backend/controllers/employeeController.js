@@ -16,6 +16,13 @@ export const addEmployee = async (req, res) => {
     } = req.body;
     const employerId = req.id;
 
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Confirm password does not match with the password.",
+        success: false,
+      });
+    }
+
     // Check if Employee firstName already exists
     let gotEmployee = await Employee.findOne({ email });
     if (gotEmployee) {

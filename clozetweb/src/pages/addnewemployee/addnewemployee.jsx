@@ -94,6 +94,7 @@ const AddNewEmployee = ()=>{
        // Reset form after submission
        setNewemployee({
          firstName: "",
+         lastName: "",
          phone: "",
          role: "",
          email: "",
@@ -101,6 +102,9 @@ const AddNewEmployee = ()=>{
          confirmPassword: "",
          image: "",
        });
+
+       setImageFile(null);
+       
      };
 
     return (

@@ -16,6 +16,7 @@ const EmployeeList = () => {
 
  useGetEmployees();
  const employees = useSelector(selectEmployees);
+ console.log(`Employees: ${employees}`);
 
     return (
       <>
@@ -91,9 +92,11 @@ const EmployeeList = () => {
                             <td>{employee.phone}</td>
                             <td>{employee.role}</td>
                             <td className="ac-box">
-                              <Button className="hipen">
-                                <LuEye />
-                              </Button>
+                              <Link to="/addemployee" state={{ employee }}>
+                                <Button className="hipen">
+                                  <LuEye />
+                                </Button>
+                              </Link>
                             </td>
                           </tr>
                         ))

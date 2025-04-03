@@ -1,5 +1,5 @@
 import React from "react";
-import './newsale.css'
+import "./newsale.css";
 import { AiFillProduct } from "react-icons/ai";
 import { IoSearchSharp } from "react-icons/io5";
 import { LiaMoneyBillWaveSolid } from "react-icons/lia";
@@ -7,28 +7,33 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { HiPencil } from "react-icons/hi2";
 import { FaUser } from "react-icons/fa";
 import { Button } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Productlist from "../productlist/productlist";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { useGetOrders } from "../files";
+import { useSelector } from "react-redux";
+import { selectOrders } from "../files";
 
 const Newsale = () => {
-  const [store, setStore] = React.useState('');
-  const [categories, setCategories] = React.useState('');
-  const [customer, setCustomer] = React.useState('');
+  const [store, setStore] = React.useState("");
+  const [categories, setCategories] = React.useState("");
+  const [customer, setCustomer] = React.useState("");
 
   const handleStore = (event) => {
     setStore(event.target.value);
   };
 
   const handleCategories = (event) => {
-    setCategories(event.target.value)
+    setCategories(event.target.value);
   };
 
   const handleCustomer = (event) => {
-    setCustomer(event.target.value)
+    setCustomer(event.target.value);
   };
+
+  useGetOrders();
+  const orders = useSelector(selectOrders);
 
   return (
     <>
@@ -73,7 +78,44 @@ const Newsale = () => {
             </div>
 
             <div className="no-product">
-              <div className="see-products">{/* <Productlist/> */}</div>
+              <div className="see-products">
+                <div className="main-or-table">
+                  <table width="100%">
+                    <thead>
+                      <tr>
+                        <th>SI</th>
+                        <th>Order Id</th>
+                        <th>Product Name</th>
+                        <th>Order Date</th>
+                        <th>Customer Information</th>
+                        <th>Total Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orders.length > 0 ? (
+                        orders
+                          .filter((order) => order.orderStatus === "Confirmed")
+                          .map((order, index) => (
+                            <tr key={order._id}>
+                              <td>{index + 1}</td>
+                              <td>{order._id}</td>
+                              <td>{order.productId?.name}</td>
+                              <td>{order.createdAt}</td>
+                              <td>{order.customerInformation}</td>
+                              <td>{order.totalAmount}</td>
+                            </tr>
+                          ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7">
+                            <p>No products available.</p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div className="billing-right">
@@ -181,5 +223,5 @@ const Newsale = () => {
       </div>
     </>
   );
-}
+};
 export default Newsale;

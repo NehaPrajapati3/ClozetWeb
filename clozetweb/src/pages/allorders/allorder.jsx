@@ -126,6 +126,7 @@ const AllOrder = () => {
                     <tr>
                       <th>SI</th>
                       <th>Order Id</th>
+                      <th>Product Name</th>
                       <th>Order Date</th>
                       <th>Customer Information</th>
                       <th>Total Amount</th>
@@ -139,6 +140,7 @@ const AllOrder = () => {
                         <tr key={order._id}>
                           <td>{index + 1}</td>
                           <td>{order._id}</td>
+                          <td>{order.productId?.name}</td>
                           <td>{order.createdAt}</td>
                           <td>{order.customerInformation}</td>
                           <td>{order.totalAmount}</td>

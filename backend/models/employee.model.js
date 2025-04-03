@@ -30,12 +30,11 @@ const employeeModel = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
     },
     confirmPassword: {
       type: String,
       required: true,
-      unique: true,
+      
     },
     employerId: {
         type: mongoose.Schema.Types.ObjectId,

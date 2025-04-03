@@ -14,8 +14,8 @@ function useGetEmployees() {
           `http://localhost:8080/api/v1/employee/allEmployees`
         );
         console.log("Fetched response is",res)
-        dispatch(setEmployees(res.data.items));
-        console.log("Dispatched setEmployees with:", res.data.items);
+        dispatch(setEmployees(res.data.Employees));
+        console.log("Dispatched setEmployees with:", res.data.Employees);
       } catch (error) {
         console.log(error);
       }

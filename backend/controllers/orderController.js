@@ -1,19 +1,26 @@
 import { Order } from "../models/order.model.js";
+import { Product } from "../models/product.model.js";
 
 // Add Item API
 export const addOrder = async (req, res) => {
   try {
-    const {
-      customerInformation,
-      totalAmount,
-      orderStatus,
-    } = req.body;
+    console.log("Request Body:", req.body); 
+    const { customerInformation, totalAmount, orderStatus, productId } =
+      req.body;
 
-    
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found.",
+        success: false,
+      });
+    }
+
     const newOrder = await Order.create({
       customerInformation,
       totalAmount,
       orderStatus,
+      productId,
     });
 
     return res.status(201).json({
@@ -33,7 +40,7 @@ export const addOrder = async (req, res) => {
 // Get All Items API
 export const getAllOrders = async (req, res) => {
   try {
-    const allOrders = await Order.find(); 
+    const allOrders = await Order.find().populate("productId");
     return res.status(200).json({
       success: true,
       items: allOrders,
@@ -51,9 +58,9 @@ export const getAllOrders = async (req, res) => {
 export const editOrder = async (req, res) => {
   try {
     const { id } = req.params;
-   
+
     const updateData = req.body;
-   // console.log(`Update data is ${updateData}`)
+    // console.log(`Update data is ${updateData}`)
 
     // Find and update item by ID
     const updatedOrder = await Order.findByIdAndUpdate(id, updateData, {
@@ -81,7 +88,6 @@ export const editOrder = async (req, res) => {
     });
   }
 };
-
 
 // Delete Item API
 export const deleteOrder = async (req, res) => {
