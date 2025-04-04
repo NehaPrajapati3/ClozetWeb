@@ -8,6 +8,7 @@ import orderRoute from "./routes/orderRoute.js";
 import storeRoute from "./routes/storeRoute.js";
 import employeeRoute from "./routes/employeeRoute.js";
 
+
 import cors from "cors";
 
 dotenv.config({});
@@ -37,6 +38,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/store", storeRoute);
 app.use("/api/v1/employee", employeeRoute);
+
 
 
 app.listen(PORT, ()=>{

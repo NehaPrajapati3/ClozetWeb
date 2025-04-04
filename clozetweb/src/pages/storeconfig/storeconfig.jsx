@@ -82,33 +82,7 @@ const StoreConfig = ()=>{
                       <Switch defaultChecked />
                     </div>
                   </div>
-                  <div className="on-off-btn">
-                    <div className="sh-or-heading">
-                      <h3>Veg</h3>
-                    </div>
-                    <div className="switch">
-                      <Switch defaultChecked />
-                    </div>
-                  </div>
-                  <div className="on-off-btn">
-                    <div className="sh-or-heading">
-                      <h3>Non Veg</h3>
-                    </div>
-                    <div className="switch">
-                      <Switch defaultChecked />
-                    </div>
-                  </div>
-                  <div className="on-off-btn">
-                    <div className="sh-or-heading">
-                      <h3>Cultery</h3>
-                      <div className="waring">
-                        <PiWarningCircleBold />
-                      </div>
-                    </div>
-                    <div className="switch">
-                      <Switch defaultChecked />
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>

@@ -143,7 +143,7 @@ const AllOrder = () => {
                           <td>{order.productId?.name}</td>
                           <td>{order.createdAt}</td>
                           <td>{order.customerInformation}</td>
-                          <td>{order.totalAmount}</td>
+                          <td>{order.productId?.price}</td>
                           <td>{orderStatuses[order._id]}</td>
                           <td
                             className="ac-box"

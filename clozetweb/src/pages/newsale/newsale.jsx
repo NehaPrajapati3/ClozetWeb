@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./newsale.css";
 import { AiFillProduct } from "react-icons/ai";
 import { IoSearchSharp } from "react-icons/io5";
@@ -14,11 +14,14 @@ import Select from "@mui/material/Select";
 import { useGetOrders } from "../files";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../files";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Newsale = () => {
   const [store, setStore] = React.useState("");
   const [categories, setCategories] = React.useState("");
   const [customer, setCustomer] = React.useState("");
+  const [cart, setCart] = useState([]);
 
   const handleStore = (event) => {
     setStore(event.target.value);
@@ -35,115 +38,191 @@ const Newsale = () => {
   useGetOrders();
   const orders = useSelector(selectOrders);
 
+  
+
+  // Add item to cart
+  const addToCart = (order) => {
+    setCart([...cart, { ...order, quantity: 1 }]);
+  };
+
+  // Remove item from cart
+  const removeFromCart = (index) => {
+    setCart(cart.filter((_, i) => i !== index));
+  };
+
+  // Update total price calculations
+ const calculateTotal = () => {
+   let subtotal = 0;
+   let totalDiscount = 0;
+   let discountType = "";
+   let discountValue = ""; // Store discount value dynamically
+
+   cart.forEach((item) => {
+     const price = item.productId?.price || 0;
+     const discount = item.productId?.discount || 0;
+     const itemDiscountType = item.productId?.discountType;
+     let discountedPrice = price;
+     let itemDiscount = 0;
+
+     if (itemDiscountType === "percentage") {
+       itemDiscount = (price * discount) / 100;
+       discountedPrice = price - itemDiscount;
+       discountType = "percentage";
+       discountValue = `${discount}%`; // Store as percentage
+     } else if (itemDiscountType === "amount") {
+       itemDiscount = discount;
+       discountedPrice = Math.max(0, price - itemDiscount);
+       discountType = "amount";
+       discountValue = `₹${discount.toFixed(2)}`; // Store as amount
+     }
+
+     subtotal += discountedPrice * item.quantity;
+     totalDiscount += itemDiscount * item.quantity;
+   });
+
+   let deliveryFee = cart.length > 0 ? 50 : 0;
+   let total = subtotal + deliveryFee;
+
+   return {
+     subtotal: subtotal || 0,
+     discount: totalDiscount || 0,
+     discountValue: discountValue || "0", // Store actual discount value
+     deliveryFee: deliveryFee || 0,
+     total: total || 0,
+   };
+ };
+
+
+
+
+  const totals = calculateTotal();
+
   return (
     <>
       <div className="newsale-section">
         <div className="newsale">
+          {/* Product Section */}
           <div className="product-left">
             <div className="product-heading">
               <AiFillProduct /> <h3>Product Section</h3>
             </div>
-            <div className="select-items">
-              <div className="select-menu">
-                <FormControl className="f-bg" fullWidth>
-                  <InputLabel className="s-bg">Select Store</InputLabel>
-                  <Select value={store} onChange={handleStore}>
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-              <div className="all-categries">
-                <FormControl className="f-bg" fullWidth>
-                  <InputLabel className="s-bg">All Categories</InputLabel>
-                  <Select value={categories} onChange={handleCategories}>
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            </div>
 
+            {/* Search Bar */}
             <div className="search-tab">
               <div className="search-input">
-                <input type="text " placeholder=" Ex..search " />
+                <input type="text" placeholder="Search..." />
               </div>
+
               <div className="search-icon">
                 <IoSearchSharp />
               </div>
             </div>
 
-            <div className="no-product">
+            {/* Product List */}
+            
               <div className="see-products">
-                <div className="main-or-table">
-                  <table width="100%">
-                    <thead>
+                <table width="100%">
+                  <thead>
+                    <tr>
+                      <th>SI</th>
+                      <th>Order ID</th>
+                      <th>Product Name</th>
+                      <th>Order Date</th>
+                      <th>Customer</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.length > 0 ? (
+                      orders
+                        .filter((order) => order.orderStatus === "Confirmed")
+                        .map((order, index) => (
+                          <tr align="center" key={order._id}>
+                            <td>{index + 1}</td>
+                            <td>{order._id}</td>
+                            <td>{order.productId?.name || "N/A"}</td>
+                            <td>
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </td>
+                            <td>{order.customerInformation}</td>
+                            <td>
+                              ₹{order.productId?.price?.toFixed(2) || "0.00"}
+                            </td>
+                            <td>
+                              <Button onClick={() => addToCart(order)}>
+                                Add to Cart
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                    ) : (
                       <tr>
-                        <th>SI</th>
-                        <th>Order Id</th>
-                        <th>Product Name</th>
-                        <th>Order Date</th>
-                        <th>Customer Information</th>
-                        <th>Total Amount</th>
+                        <td colSpan="7">No products available.</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {orders.length > 0 ? (
-                        orders
-                          .filter((order) => order.orderStatus === "Confirmed")
-                          .map((order, index) => (
-                            <tr key={order._id}>
-                              <td>{index + 1}</td>
-                              <td>{order._id}</td>
-                              <td>{order.productId?.name}</td>
-                              <td>{order.createdAt}</td>
-                              <td>{order.customerInformation}</td>
-                              <td>{order.totalAmount}</td>
-                            </tr>
-                          ))
-                      ) : (
-                        <tr>
-                          <td colSpan="7">
-                            <p>No products available.</p>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            </div>
+            
           </div>
+
+          {/* Billing Section */}
           <div className="billing-right">
             <div className="billing-heading">
               <LiaMoneyBillWaveSolid /> <h3>Billing Section</h3>
             </div>
-            <div className="select-customer">
+
+            {/* <div className="select-customer">
               <div className="customer">
                 <FormControl className="f-bg" fullWidth>
-                  <InputLabel className="s-bg">Select Coustomer</InputLabel>
+                  <InputLabel className="s-bg">Select Customer</InputLabel>
                   <Select value={customer} onChange={handleCustomer}>
                     <MenuItem value="">None</MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value="customer1">Customer 1</MenuItem>
+                    <MenuItem value="customer2">Customer 2</MenuItem>
                   </Select>
                 </FormControl>
               </div>
               <div className="add-customer">
                 <Button className="customer-btn">
-                  <IoMdAddCircleOutline />
-                  Add New Customer
+                  <IoMdAddCircleOutline /> Add New Customer
                 </Button>
               </div>
+            </div> */}
+
+            <div className="billing-heading see-products">
+              <table width="100%">
+                <thead>
+                  <tr className="gap-3">
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.map((item, index) => (
+                    <tr align="center" key={index}>
+                      <td>{item.productId?.name || "N/A"}</td>
+                      <td>{item.quantity}</td>
+                      <td>₹{item.productId?.price?.toFixed(2) || "0.00"}</td>
+                      <td>
+                        <button
+                          className="table-btn"
+                          onClick={() => removeFromCart(index)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+
             <div className="delivery-info">
               <div className="home-deli">
-                {" "}
                 <FaUser />{" "}
                 <h4>
                   Delivery Information <span>(Home Delivery)</span>
@@ -153,70 +232,54 @@ const Newsale = () => {
                 <HiPencil />
               </div>
             </div>
+
+            {/* Cart Table */}
             <div className="table-bill">
               <table
-                cellPadding={10}
                 className="cart-table"
+                cellPadding={10}
                 border={1}
                 rules="all"
               >
-                <thead className="thead-border">
+                <thead className="thead-border"></thead>
+                <tbody align="center">
                   <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody className="cartbill" align="center">
-                  <tr align="center">
-                    <td>Item 1</td>
-                    <td>1</td>
-                    <td>$15</td>
-                    <td>
-                      <button className="table-btn" type="button">
-                        Delete
-                      </button>
+                    <td colSpan={2}>
+                      Discount <span>({totals.discountValue})</span>:
+                    </td>
+                    <td colSpan={2}>
+                      -₹{totals.discount?.toFixed(2) || "0.00"}
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={2}>Addon:</td>
-                    <td colSpan={2}>$0</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={2}>Subtotal (tax included):</td>
-                    <td colSpan={2}>$0</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={2}>Discount:</td>
-                    <td colSpan={2}>$0</td>
+                    <td colSpan={2}>Subtotal:</td>
+                    <td colSpan={2}>
+                      ₹{totals.subtotal?.toFixed(2) || "0.00"}
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={2}>Delivery Fee:</td>
-                    <td colSpan={2}>$0</td>
+                    <td colSpan={2}>
+                      ₹{totals.deliveryFee.toFixed(2) || "0.00"}
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={2}>
                       <strong>Total:</strong>
                     </td>
                     <td colSpan={2}>
-                      <strong>$0</strong>
+                      <strong>₹{totals.total.toFixed(2) || "0.00"}</strong>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div className="pay-method">
-              <h3>Payment Method</h3>
-            </div>
             <div className="place-cart">
-              <div className="placebtn">
-                <Button className="pbtn">Place order</Button>
-              </div>
-              <div className="clean-cart">
-                <Button className="cbtn">Clear cart</Button>
-              </div>
+              <Button className="pbtn">Place Order</Button>
+              <Button className="cbtn" onClick={() => setCart([])}>
+                Clear Cart
+              </Button>
             </div>
           </div>
         </div>
