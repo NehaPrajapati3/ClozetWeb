@@ -53,5 +53,5 @@ app.use(cors(corsOption));
 
 app.listen(PORT, () => {
   connectDB();
-  console.log(`Server listening at port ${PORT}`);
+  console.log(`Server is listening at port ${PORT}`);
 });
