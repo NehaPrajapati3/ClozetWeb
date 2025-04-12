@@ -35,8 +35,8 @@ const AllOrder = () => {
    console.log(`OrderId: ${orderId}`);
    try {
      const response = await axios.put(
-       `http://localhost:8080/api/v1/order/edit/${orderId}`,
-       { orderStatus: newStatus }, 
+       `${process.env.REACT_APP_API_URL}/api/v1/order/edit/${orderId}`,
+       { orderStatus: newStatus },
        {
          headers: {
            "Content-Type": "application/json",

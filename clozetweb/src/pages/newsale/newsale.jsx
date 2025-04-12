@@ -146,7 +146,7 @@ const Newsale = () => {
     
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/seller-dashboard/add",
+        `${process.env.REACT_APP_API_URL}/api/v1/seller-dashboard/add`,
         cart[0]
       );
 

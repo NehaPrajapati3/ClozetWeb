@@ -26,7 +26,7 @@ const SignUp = ()=>{
     console.log("Sign up page")
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/v1/user/signup",
+        `${process.env.REACT_APP_API_URL}/api/v1/user/signup`,
         user,
         {
           headers: {

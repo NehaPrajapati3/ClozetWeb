@@ -71,7 +71,7 @@ const Coupons = () => {
       if (couponToEdit?._id) {
         // Update Coupon
         res = await axios.put(
-          `http://localhost:8080/api/v1/coupon/edit/${couponToEdit._id}`,
+          `${process.env.REACT_APP_API_URL}/api/v1/coupon/edit/${couponToEdit._id}`,
           newCoupon,
           {
             headers: { "Content-Type": "application/json" },
@@ -81,7 +81,7 @@ const Coupons = () => {
       } else {
         // Add new Coupon
         res = await axios.post(
-          "http://localhost:8080/api/v1/coupon/add",
+          `${process.env.REACT_APP_API_URL}/api/v1/coupon/add`,
           newCoupon,
           {
             headers: { "Content-Type": "application/json" },

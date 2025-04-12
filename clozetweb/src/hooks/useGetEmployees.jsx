@@ -11,7 +11,7 @@ function useGetEmployees() {
       try {
         axios.defaults.withCredentials = true;
         const res = await axios.get(
-          `http://localhost:8080/api/v1/employee/allEmployees`
+          `${process.env.REACT_APP_API_URL}/api/v1/employee/allEmployees`
         );
         console.log("Fetched response is",res)
         dispatch(setEmployees(res.data.Employees));

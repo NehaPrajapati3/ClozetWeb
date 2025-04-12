@@ -10,7 +10,7 @@ function useGetPlacedOrders() {
       try {
         axios.defaults.withCredentials = true;
         const res = await axios.get(
-          `http://localhost:8080/api/v1/seller-dashboard/all`
+          `${process.env.REACT_APP_API_URL}/api/v1/seller-dashboard/all`
         );
         console.log("Fetched placed order response is", res);
         dispatch(setPlacedOrders(res.data.items));

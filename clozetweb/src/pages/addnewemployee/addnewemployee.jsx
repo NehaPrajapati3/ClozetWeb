@@ -64,7 +64,7 @@ const AddNewEmployee = ()=>{
          if (employeeToEdit?._id) {
            // Update employee
            res = await axios.put(
-             `http://localhost:8080/api/v1/employee/editEmployee/${employeeToEdit._id}`,
+             `${process.env.REACT_APP_API_URL}/api/v1/employee/editEmployee/${employeeToEdit._id}`,
              formData,
              {
                headers: { "Content-Type": "multipart/form-data" },
@@ -74,7 +74,7 @@ const AddNewEmployee = ()=>{
          } else {
            // Add new employee
            res = await axios.post(
-             "http://localhost:8080/api/v1/employee/addEmployee",
+             `${process.env.REACT_APP_API_URL}/api/v1/employee/addEmployee`,
              formData,
              {
                headers: { "Content-Type": "multipart/form-data" },

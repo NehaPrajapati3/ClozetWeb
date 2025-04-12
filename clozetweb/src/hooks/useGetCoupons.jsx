@@ -9,7 +9,9 @@ function useGetCoupons() {
   const fetchCoupons = useCallback(async () => {
     try {
       axios.defaults.withCredentials = true;
-      const res = await axios.get(`http://localhost:8080/api/v1/coupon/all`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/coupon/all`
+      );
       console.log("Fetched Coupon response is", res);
       dispatch(setCoupons(res.data.items));
       console.log("Dispatched setCoupons with:", res.data.items);

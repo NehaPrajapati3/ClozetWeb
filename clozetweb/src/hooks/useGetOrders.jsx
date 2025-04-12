@@ -9,7 +9,9 @@ function useGetOrders() {
     const fetchOrders = async () => {
       try {
         axios.defaults.withCredentials = true;
-        const res = await axios.get(`http://localhost:8080/api/v1/order/all`);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/order/all`
+        );
         console.log("Fetched order response is", res);
         dispatch(setOrders(res.data.items));
         console.log("Dispatched setOrders with:", res.data.items);

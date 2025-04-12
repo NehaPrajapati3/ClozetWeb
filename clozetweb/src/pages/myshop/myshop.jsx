@@ -54,7 +54,7 @@ const MyShop = () => {
       if (storeToEdit?._id) {
         // Update store
         res = await axios.put(
-          `http://localhost:8080/api/v1/store/edit/${storeToEdit._id}`,
+          `${process.env.REACT_APP_API_URL}/api/v1/store/edit/${storeToEdit._id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -64,7 +64,7 @@ const MyShop = () => {
       } else {
         // Add new store
         res = await axios.post(
-          "http://localhost:8080/api/v1/store/add",
+          `${process.env.REACT_APP_API_URL}/api/v1/store/add`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },

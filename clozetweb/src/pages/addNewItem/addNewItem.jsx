@@ -196,7 +196,7 @@ function AddNewItem() {
       if (productToEdit?._id) {
         // Update product
         res = await axios.put(
-          `http://localhost:8080/api/v1/products/edit/${productToEdit._id}`,
+          `${process.env.REACT_APP_API_URL}/api/v1/products/edit/${productToEdit._id}`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -206,7 +206,7 @@ function AddNewItem() {
       } else {
         // Add new product
         res = await axios.post(
-          "http://localhost:8080/api/v1/products/add",
+          `${process.env.REACT_APP_API_URL}/api/v1/products/add`,
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
