@@ -20,6 +20,7 @@ const Login = ()=>{
 
     const onSubmitHandler = async (e) => {
       e.preventDefault();
+       console.log("outside log in try{}");
       try {
         console.log("inside log in try{}")
         const res = await axios.post(
