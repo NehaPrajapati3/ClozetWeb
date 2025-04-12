@@ -8,7 +8,7 @@
 *.log
 
 # Optional: Ignore build folders if you're using React or other compilers
-**/build/
+
 
 # System junk
 .DS_Store
