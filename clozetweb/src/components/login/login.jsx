@@ -21,6 +21,7 @@ const Login = ()=>{
     const onSubmitHandler = async (e) => {
       e.preventDefault();
       try {
+        console.log("inside log in try{}")
         const res = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/v1/user/loginUser`,
           user,
