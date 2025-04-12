@@ -22,7 +22,7 @@ const Login = ()=>{
       e.preventDefault();
       try {
         const res = await axios.post(
-          "http://localhost:8080/api/v1/user/loginUser",
+          `${process.env.REACT_APP_API_URL}/api/v1/user/loginUser`,
           user,
           {
             headers: {
