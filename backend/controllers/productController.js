@@ -104,7 +104,6 @@ export const addItem = async (req, res) => {
       discountValue,
       taxIncluded,
       stock,
-      colors,
       stockStatus,
       restockDate,
       returnPolicy,
@@ -167,7 +166,6 @@ export const addItem = async (req, res) => {
       discountValue,
       taxIncluded: taxIncluded === "true" || taxIncluded === true, // handle boolean
       stock: stock ? JSON.parse(stock) : {},
-      colors: colors ? JSON.parse(colors) : [],
       stockStatus,
       restockDate,
       imageUrl,

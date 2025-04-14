@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    tags: {
+      type: [String],
+      default: [],
+    },
     brand: {
       type: String,
       default: "",
@@ -56,10 +60,6 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: mongoose.Schema.Types.Mixed, // To store size-wise or custom structure
       default: {},
-    },
-    colors: {
-      type: [String],
-      default: [],
     },
     stockStatus: {
       type: String,

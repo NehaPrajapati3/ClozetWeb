@@ -37,7 +37,6 @@ function AddNewItem() {
   const [videoFile, setVideoFile] = useState(null);
   const [sku, setSku] = useState("");
   const sizes = ["S", "M", "L", "XL"];
-  const colors = ["Black", "Blue", "White"];
 
   let productId;
   const [newProduct, setNewProduct] = useState({
@@ -46,6 +45,7 @@ function AddNewItem() {
     subcategory: productToEdit?.subcategory || "",
     shortDesc: productToEdit?.shortDesc || "",
     detailedDesc: productToEdit?.detailedDesc || "",
+    tags: productToEdit?.tags || [],
     brand: productToEdit?.brand || "",
     sku: productToEdit?.sku || "",
     sellingPrice: productToEdit?.sellingPrice || "",
@@ -54,12 +54,6 @@ function AddNewItem() {
     discountValue: productToEdit?.discountValue || "",
     taxIncluded: productToEdit?.taxIncluded ?? true,
     stock: productToEdit?.stock || {},
-    colors: Array.isArray(productToEdit?.colors)
-      ? productToEdit.colors
-      : typeof productToEdit?.colors === "string"
-      ? JSON.parse(productToEdit.colors)
-      : [],
-
     stockStatus: productToEdit?.stockStatus || "",
     restockDate: productToEdit?.restockDate || "",
     image: productToEdit?.image || [],
@@ -84,6 +78,7 @@ function AddNewItem() {
         subcategory: productToEdit?.subcategory || "",
         shortDesc: productToEdit?.shortDesc || "",
         detailedDesc: productToEdit?.detailedDesc || "",
+        tags: productToEdit?.tags || [],
         brand: productToEdit?.brand || "",
         sku: productToEdit?.sku || "",
         sellingPrice: productToEdit?.sellingPrice || "",
@@ -92,13 +87,6 @@ function AddNewItem() {
         discountValue: productToEdit?.discountValue || "",
         taxIncluded: productToEdit?.taxIncluded ?? true,
         stock: productToEdit?.stock || {},
-        colors: Array.isArray(productToEdit?.colors)
-          ? productToEdit.colors
-          : typeof productToEdit?.colors === "string"
-          ? JSON.parse(productToEdit.colors)
-          : [],
-
-        
         stockStatus: productToEdit?.stockStatus || "",
         restockDate: productToEdit?.restockDate || "",
         image: productToEdit?.image || [],
@@ -118,17 +106,16 @@ function AddNewItem() {
 
   const handleAutoGenerateSKU = (e, selectedSize) => {
     e.preventDefault();
-    const color = newProduct.colors?.color;
+   
     const sizeValue = newProduct.stock?.[selectedSize];
 
     if (
       !newProduct.category ||
       !newProduct.subcategory ||
-      !color ||
       !sizeValue
     ) {
       toast.error(
-        "Please fill category, subcategory, color, selected size, and ID to generate SKU."
+        "Please fill category, subcategory, selected size, and ID to generate SKU."
       );
       return;
     }
@@ -136,8 +123,6 @@ function AddNewItem() {
     const newSku = `${newProduct.category
       .slice(0, 3)
       .toUpperCase()}-${newProduct.subcategory
-      .slice(0, 3)
-      .toUpperCase()}-${color
       .slice(0, 3)
       .toUpperCase()}-${selectedSize.toUpperCase()}`;
     setSku(newSku);
@@ -151,22 +136,14 @@ function AddNewItem() {
     }));
   };
 
-  const handleColorChange = (color) => {
-    setNewProduct((prev) => {
-      const exists = prev.colors?.includes(color);
-      const newColors = exists
-        ? prev.colors?.filter((c) => c !== color)
-        : [...prev.colors, color];
-      return { ...prev, colors: newColors };
-    });
-  };
+ 
 
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 
     try {
       const formData = new FormData();
-      const stringifyKeys = ["colors", "stock", "visibility"];
+      const stringifyKeys = ["stock", "visibility"];
 
       for (const key in newProduct) {
         const value = newProduct[key];
@@ -230,6 +207,7 @@ function AddNewItem() {
       subcategory: "",
       shortDesc: "",
       detailedDesc: "",
+      tags: [],
       brand: "",
       sku: "",
       sellingPrice: "",
@@ -238,11 +216,6 @@ function AddNewItem() {
       discountValue: "",
       taxIncluded: true,
       stock: {},
-      colors: Array.isArray(productToEdit?.colors)
-        ? productToEdit.colors
-        : typeof productToEdit?.colors === "string"
-        ? JSON.parse(productToEdit.colors)
-        : [],
       stockStatus: "",
       restockDate: "",
       image: [],
@@ -566,7 +539,7 @@ function AddNewItem() {
                         />
                       </div>
                     </div>
-                    <div className="discount-box">
+                    {/* <div className="discount-box">
                       <div className="discount-heading">
                         <h3>Price Includes GST</h3>
                       </div>
@@ -587,7 +560,7 @@ function AddNewItem() {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -616,26 +589,7 @@ function AddNewItem() {
                         ))}
                       </div>
                     </div>
-                    <div className="price-box">
-                      <div className="price-heading">
-                        <h3>Color Options</h3>
-                      </div>
-                      <div className="price-input">
-                        {colors.map((color) => (
-                          <Chip
-                            key={color}
-                            label={color}
-                            color={
-                              newProduct.colors?.includes(color)
-                                ? "primary"
-                                : "default"
-                            }
-                            onClick={() => handleColorChange(color)}
-                            className="mr-2 mt-2"
-                          />
-                        ))}
-                      </div>
-                    </div>
+
                     <div className="category-item-list">
                       <div className="item-select-box">
                         <div className="price-heading">
@@ -685,6 +639,28 @@ function AddNewItem() {
                         />
                       </div>
                     </div>
+                    <div className="discount-box">
+                      <div className="discount-heading">
+                        <h3>Price Includes GST</h3>
+                      </div>
+                      <div className="price-input">
+                        <div className="mx-2">
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                checked={newProduct.taxIncluded}
+                                onChange={(e) =>
+                                  setNewProduct({
+                                    ...newProduct,
+                                    taxIncluded: e.target.checked,
+                                  })
+                                }
+                              />
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -722,6 +698,24 @@ function AddNewItem() {
                       </FormControl>
                     </div>
                   </div>
+                  <div className="price-box">
+                    <div className="price-heading">
+                      <h3>SEO & Key Words</h3>
+                    </div>
+                    <div className="price-input">
+                      <input
+                        type="text"
+                        placeholder=""
+                        value={newProduct.seoKeywords}
+                        onChange={(e) =>
+                          setNewProduct({
+                            ...newProduct,
+                            seoKeywords: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
                   <div className="item-select-box">
                     <div className="store-heading">
                       <h2>SKU / Product Code</h2>
@@ -736,7 +730,7 @@ function AddNewItem() {
                       />
                       <button
                         variant="outlined"
-                        className=" border-2 bg-blend-color border-b-gray-900 bg-slate-400"
+                        className=" border-2 bg-blend-color border-b-gray-900 bg-slate-400 h-11 text-sm"
                         onClick={handleAutoGenerateSKU}
                         sx={{ textTransform: "none" }}
                       >
@@ -807,24 +801,6 @@ function AddNewItem() {
                             />
                           }
                           label="Hide Product"
-                        />
-                      </div>
-                    </div>
-                    <div className="price-box">
-                      <div className="price-heading">
-                        <h3>SEO & Key Words</h3>
-                      </div>
-                      <div className="price-input">
-                        <input
-                          type="text"
-                          placeholder=""
-                          value={newProduct.seoKeywords}
-                          onChange={(e) =>
-                            setNewProduct({
-                              ...newProduct,
-                              seoKeywords: e.target.value,
-                            })
-                          }
                         />
                       </div>
                     </div>

@@ -23,6 +23,7 @@ const Login = ()=>{
        console.log("outside log in try{}");
       try {
         console.log("inside log in try{}")
+        console.log(`React app api url:${process.env.REACT_APP_API_URL}`);
         const res = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/v1/user/loginUser`,
           user,
@@ -36,10 +37,10 @@ const Login = ()=>{
 
         navigate("/");
 
-        //console.log(res);
+        console.log(res);
         dispatch(login(res.data));
 
-        //console.log(data);
+        console.log(res.data);
       } catch (error) {
         toast.error(error.response.data.message);
         console.log(error);

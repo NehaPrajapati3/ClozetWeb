@@ -26,12 +26,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// const corsOption = {
+//   origin: "http://localhost:3000",
+//   credentials: true,
+// };
+// app.use(cors(corsOption));
+
 // Serve static files from 'uploads' folder
 app.use("/uploads", express.static("uploads"));
 
 // Routes
 
 app.use("/api/v1/user", userRoute);
+console.log("backend Index.js")
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/store", storeRoute);
@@ -50,6 +57,7 @@ const corsOption = {
   credentials: true,
 };
 app.use(cors(corsOption));
+
 
 app.listen(PORT, () => {
   connectDB();

@@ -95,6 +95,7 @@ const MyShop = () => {
     <>
       <div className="myshop-section">
         <form
+          className="myshop-section"
           action=""
           encType="multipart/form-data"
           onSubmit={handleAddOrUpdate}
