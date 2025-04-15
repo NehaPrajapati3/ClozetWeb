@@ -1,58 +1,105 @@
-import { User } from "../models/user.model.js";
+import { SellerUserAuth } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
-export const signup = async (req, res) => {
+const OTP_EXPIRY_MINUTES = 2;
+
+// export const signup = async (req, res) => {
+//   try {
+//     console.log("sign up user");
+//     const { firstName, lastName, email, password  } = req.body;
+//     console.log(firstName, lastName, email, password );
+//     if (!firstName || !lastName || !email || !password ) {
+//       return res.status(400).json({ message: "All fields are required" });
+//     }
+//     const user = await SellerUserAuth.findOne({ email });
+//     if (user) {
+//       return res.status(400).json({
+//         message: "User already exists with this email.",
+//         success: false,
+//       });
+//     }
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     await SellerUserAuth.create({
+//       firstName,
+//       lastName,
+//       email,
+//       password: hashedPassword,
+//     });
+
+//     return res.status(201).json({
+//       message: "Account created succesfully.",
+//       success: true,
+//     });
+//   } catch (error) {
+//     console.log(`Sign up user error: ${error}`);
+//      return res.status(500).json({
+//        message: "Internal server error",
+//        success: false,
+//      });
+//   }
+// };
+
+// Register Seller
+export const registerSeller = async (req, res) => {
   try {
-    console.log("sign up user");
-    const { firstName, lastName, email, password  } = req.body;
-    console.log(firstName, lastName, email, password );
-    if (!firstName || !lastName || !email || !password ) {
-      return res.status(400).json({ message: "All fields are required" });
+    const { firstName, lastName, mobileNo, email, password } = req.body;
+
+    const existingUser = await SellerUserAuth.findOne({ "userInfo.mobileNo": mobileNo });
+    if (existingUser) {
+      return res.status(400).json({ message: "Mobile number already registered.", success: false });
     }
-    const user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({
-        message: "User already exists with this email.",
-        success: false,
-      });
-    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
+    const newSeller = new SellerUserAuth({
+      userInfo: { firstName, lastName, mobileNo },
+      userAuth: { email, password: hashedPassword },
     });
 
-    return res.status(201).json({
-      message: "Account created succesfully.",
-      success: true,
-    });
-  } catch (error) {
-    console.log(`Sign up user error: ${error}`);
-     return res.status(500).json({
-       message: "Internal server error",
-       success: false,
-     });
+    await newSeller.save();
+    res.status(201).json({ message: "Seller registered successfully.", success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-export const loginUser = async (req, res) => {
+export const loginseller = async (req, res) => {
   try {
-    console.log("Log in user");
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-   const user = await User.findOne({ email }).select("+password");
-   if (!user) {
-     return res.status(400).json({
-       message: "Incorrect email",
-       success: false,
+     console.log("Log in user");
+     const { mobileNo, password } = req.body;
+
+     const user = await SellerUserAuth.findOne({
+       "userInfo.mobileNo": mobileNo,
      });
-   }
+     if (!user) {
+       return res
+         .status(404)
+         .json({ message: "Seller not found.", success: false });
+     }
+
+     const isMatch = await bcrypt.compare(password, user.userAuth.password);
+     if (!isMatch) {
+       return res
+         .status(400)
+         .json({ message: "Invalid credentials.", success: false });
+     }
+    
+    
+
+  //   const { email, password } = req.body;
+  //   if (!email || !password) {
+  //     return res.status(400).json({ message: "All fields are required" });
+  //   }
+  //  const user = await SellerUserAuth.findOne({ email }).select("+password");
+  //  if (!user) {
+  //    return res.status(400).json({
+  //      message: "Incorrect email",
+  //      success: false,
+  //    });
+  //  }
 
   //  const isPasswordCorrect = await bcrypt.compare(password, user.password);
   //  if (!isPasswordCorrect) {
@@ -78,12 +125,12 @@ export const loginUser = async (req, res) => {
       })
       .json({
         _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
+        firstName: user.userInfo?.firstName,
+        lastName: user.userInfo?.lastName,
+        email: user.userInfo?.email,
       });
   } catch (error) {
-    console.log(`Log in user error: ${error}`);
+    console.log(`Log in seller error: ${error}`);
      return res.status(500).json({
        message: "Internal server error",
        success: false,
@@ -91,8 +138,75 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const logoutUser = (req, res) => {
-  console.log("Inside log out user")
+export const generateOtp = async (req, res) => {
+  try {
+    const { mobileNo } = req.body;
+
+    const seller = await SellerUserAuth.findOne({
+      "userInfo.mobileNo": mobileNo,
+    });
+    if (!seller) {
+      return res.status(404).json({ message: "Seller not found.", success: false });
+    }
+   
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const otpExpiry = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60000);
+    seller.userAuth.otp = otp;
+    seller.userAuth.otpValid = otpExpiry;
+    await seller.save();
+
+    // TODO: Integrate with actual SMS service
+    console.log(`OTP for ${mobileNo}: ${otp}`);
+
+    res.status(200).json({ message: "OTP sent to your mobile number." });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Verify OTP
+export const verifyOtp = async (req, res) => {
+  try {
+    const { mobileNo, otp } = req.body;
+
+    const user = await SellerUserAuth.findOne({
+      "userInfo.mobileNo": mobileNo,
+    });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Seller not found.", success: false });
+    }
+
+    if (
+      user.userAuth.otp !== otp ||
+      !user.userAuth.otpValid ||
+      new Date() > new Date(user.userAuth.otpValid)
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired OTP.", success: false });
+    }
+
+    // OTP is valid
+    user.userAuth.otp = null;
+    user.userAuth.otpValid = null;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "OTP verified successfully.", success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+export const logoutSeller = (req, res) => {
+  console.log("Inside log out seller")
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out succesfully",

@@ -38,7 +38,6 @@ app.use("/uploads", express.static("uploads"));
 // Routes
 
 app.use("/api/v1/user", userRoute);
-console.log("backend Index.js")
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/store", storeRoute);
