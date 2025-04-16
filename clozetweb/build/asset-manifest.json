@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.cbdedead.css",
-    "main.js": "/static/js/main.f2e88298.js",
+    "main.js": "/static/js/main.be0f7cee.js",
     "static/js/453.ace6aeea.chunk.js": "/static/js/453.ace6aeea.chunk.js",
     "static/media/bankcart.jpg": "/static/media/bankcart.d03375021fde91348bc6.jpg",
     "index.html": "/index.html",
     "main.cbdedead.css.map": "/static/css/main.cbdedead.css.map",
-    "main.f2e88298.js.map": "/static/js/main.f2e88298.js.map",
+    "main.be0f7cee.js.map": "/static/js/main.be0f7cee.js.map",
     "453.ace6aeea.chunk.js.map": "/static/js/453.ace6aeea.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cbdedead.css",
-    "static/js/main.f2e88298.js"
+    "static/js/main.be0f7cee.js"
   ]
 }

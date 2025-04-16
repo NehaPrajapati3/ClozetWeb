@@ -42,7 +42,7 @@ const Header = () => {
       //console.log("Inside logout");
 
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/logoutUser`
+        `${process.env.REACT_APP_API_URL}/api/v1/user/logout`
       );
      // console.log("Inside logout after res");
      // console.log(`Res is ${res}`);

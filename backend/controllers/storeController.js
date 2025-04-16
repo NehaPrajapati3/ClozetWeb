@@ -11,7 +11,7 @@ export const addStore = async (req, res) => {
 
  
 
-    // Check if product name already exists
+    // Check if store name already exists
     let gotStore = await Store.findOne({ name });
     if (gotStore) {
       return res.status(400).json({
