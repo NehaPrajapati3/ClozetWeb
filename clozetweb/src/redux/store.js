@@ -5,6 +5,8 @@ import orderReducer from "./orderSlice";
 import employeeReducer from "./employeeSlice";
 import couponReducer from "./couponSlice";
 import placedOrderReducer from "./placedOrdersSlice";
+import categoryReducer from "./categorySlice";
+import subCategoryReducer from "./subCategorySlice";
 import {
   persistReducer,
   FLUSH,
@@ -29,6 +31,8 @@ const rootReducer = combineReducers({
   employee: employeeReducer,
   coupon: couponReducer,
   placedOrder: placedOrderReducer,
+  category: categoryReducer,
+  subCategory: subCategoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

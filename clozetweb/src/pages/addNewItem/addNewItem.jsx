@@ -14,6 +14,20 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  selectSubCategories,
+  selectSubCategoryToEdit,
+} from "../../redux/selectors";
+import { selectCategories, selectCategoryToEdit } from "../../redux/selectors";
+import {
+  setSubCategoryToEdit,
+  clearSubCategoryToEdit,
+  deleteSubCategory,
+} from "../../redux/subCategorySlice";
+import useGetSubCategories from "../../hooks/useGetSubcategories";
+import useGetCategories from "../../hooks/useGetCategories";
 
 function AddNewItem() {
   // const [allCategoryItem, setAllCategoryItem] = useState("");
@@ -29,6 +43,14 @@ function AddNewItem() {
   // const handleallItem = (event) => {
   //   setAllItem(event.target.value);
   // };
+
+   useGetCategories();
+    const categories = useSelector(selectCategories);
+    console.log("Categories to select:", categories);
+  
+     useGetSubCategories();
+      const subCategories = useSelector(selectSubCategories);
+      console.log("subCategories:", subCategories);
 
   const location = useLocation();
   const productToEdit = location.state?.product || null;
@@ -68,6 +90,10 @@ function AddNewItem() {
     buyerNotes: productToEdit?.buyerNotes || "",
     status: productToEdit?.status || "draft",
   });
+
+  const filteredSubCategories = subCategories.filter(
+    (sub) => sub.mainCategoryId?.categoryName === newProduct.category
+  );
 
   useEffect(() => {
     if (productToEdit) {
@@ -421,10 +447,14 @@ function AddNewItem() {
                             })
                           }
                         >
-                          <MenuItem value="Men">Men</MenuItem>
-                          <MenuItem value="Women">Women</MenuItem>
-                          <MenuItem value="Kids">Kids</MenuItem>
-                          <MenuItem value="Accessories">Accessories</MenuItem>
+                          {categories.map((category, index) => (
+                            <MenuItem
+                              key={index}
+                              value={category?.categoryName || ""}
+                            >
+                              {category?.categoryName || "Unnamed"}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </div>
@@ -445,10 +475,11 @@ function AddNewItem() {
                             })
                           }
                         >
-                          <MenuItem value="T-Shirts">T-Shirts</MenuItem>
-                          <MenuItem value="Jeans">Jeans</MenuItem>
-                          <MenuItem value="Dresses">Dresses</MenuItem>
-                          <MenuItem value="Footwear">Footwear</MenuItem>
+                          {filteredSubCategories.map((sub, index) => (
+                            <MenuItem key={index} value={sub.subCategoryName}>
+                              {sub.subCategoryName}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </div>

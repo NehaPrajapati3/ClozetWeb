@@ -36,6 +36,31 @@ export const selectCouponToEdit = createSelector(
   (coupon) => coupon.couponToEdit || null
 );
 
+const selectCategoryState = (state) => state.category || { categories: [] };
+
+export const selectCategories = createSelector(
+  [selectCategoryState],
+  (category) => category.categories || []
+);
+
+export const selectCategoryToEdit = createSelector(
+  [selectCategoryState],
+  (category) => category.categoryToEdit || null
+);
+
+
+const selectSubCategoryState = (state) => state.subCategory || { subCategories: [] };
+
+export const selectSubCategories = createSelector(
+  [selectSubCategoryState],
+  (subCategory) => subCategory.subCategories || []
+);
+
+export const selectSubCategoryToEdit = createSelector(
+  [selectSubCategoryState],
+  (subCategory) => subCategory.subCategoryToEdit || null
+);
+
 const selectPlacedOrderState = (state) =>
   state.placedOrder || { placedOrders: [] };
 

@@ -43,36 +43,36 @@ const OTP_EXPIRY_MINUTES = 2;
 // };
 
 // Register Seller
-export const registerSeller = async (req, res) => {
-  try {
-    const { firstName, lastName, mobileNo, email, password } = req.body;
+// export const registerSeller = async (req, res) => {
+//   try {
+//     const { firstName, lastName, mobileNo, email, password } = req.body;
 
-    const existingUser = await SellerUserAuth.findOne({ "userInfo.mobileNo": mobileNo });
-    if (existingUser) {
-      return res.status(400).json({ message: "Mobile number already registered.", success: false });
-    }
+//     const existingUser = await SellerUserAuth.findOne({ "userInfo.mobileNo": mobileNo });
+//     if (existingUser) {
+//       return res.status(400).json({ message: "Mobile number already registered.", success: false });
+//     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newSeller = new SellerUserAuth({
-      userInfo: { firstName, lastName, mobileNo },
-      userAuth: { email, password: hashedPassword },
-    });
+//     const newSeller = new SellerUserAuth({
+//       userInfo: { firstName, lastName, mobileNo },
+//       userAuth: { email, password: hashedPassword },
+//     });
 
-    await newSeller.save();
-    res.status(201).json({ message: "Seller registered successfully.", success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+//     await newSeller.save();
+//     res.status(201).json({ message: "Seller registered successfully.", success: true });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 export const loginseller = async (req, res) => {
   try {
      console.log("Log in user");
-     const { mobileNo, password } = req.body;
+     const { email, password } = req.body;
 
      const user = await SellerUserAuth.findOne({
-       "userInfo.mobileNo": mobileNo,
+       "userAuth.email": email,
      });
      if (!user) {
        return res

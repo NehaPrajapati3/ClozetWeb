@@ -25,7 +25,7 @@ const Login = ()=>{
         console.log("inside log in try{}")
         console.log(`React app api url:${process.env.REACT_APP_API_URL}`);
         const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/v1/user/loginUser`,
+          `${process.env.REACT_APP_API_URL}/api/v1/user/login`,
           user,
           {
             headers: {

@@ -35,6 +35,8 @@ import ProductGallery from "./pages/productgallery/productgallery.jsx";
 import BulkImport from "./pages/bulkimport/bulkimport.jsx";
 import BulkExport from "./pages/bulkexport/bulkexportt.jsx";
 import AddItem from "./pages/addNewItem/addNewItem.jsx";
+import Category from "./pages/category/category.jsx";
+import SubCategory from "./pages/subCategory/SubCategory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -140,6 +142,14 @@ const router = createBrowserRouter([
       {
         path: "/addItem",
         element: <AddItem />,
+      },
+      {
+        path: "/category",
+        element: <Category />,
+      },
+      {
+        path: "/subCategory",
+        element: <SubCategory />,
       },
     ],
   },

@@ -12,6 +12,8 @@ import { BiSolidUser } from "react-icons/bi";
 import {  Link, useNavigate } from "react-router-dom";
 import { PiSailboatFill } from "react-icons/pi";
 import { MdDiamond } from "react-icons/md";
+import { MdCategory } from "react-icons/md";
+
 
 
 
@@ -80,6 +82,25 @@ const isOpenDropmenu = (index)=>{
                         <li><Link to="/allorder">All Orders</Link></li>
                         <li><Link to="#">Orders</Link></li>
                         <li><Link to="#">Order Refunds</Link></li>
+                      </ul>
+                      </div>
+                     
+    
+                     
+                    </li>
+                    <li>
+                    
+                    
+                    <Button className={`${activeTab===2  ? 'active':""}`} onClick={()=>isOpenDropmenu(2)} >
+                        <span className="side-icons"><MdCategory className="text-red-500 text-4xl " /></span>
+                        Category Section
+                        <span className="arrow"><IoIosArrowForward/></span>
+                      </Button>
+                      <div className={`dropmenuwraper  ${activeTab===2 && isToggleDropmenu===true  ? 'colapse': 'colapsed'}`}>
+                      <ul className="dropmenu">
+                        <li><Link to="/category">Category</Link></li>
+                        <li><Link to="/subCategory">Sub Category</Link></li>
+                        
                       </ul>
                       </div>
                      
