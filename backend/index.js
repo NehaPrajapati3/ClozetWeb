@@ -50,10 +50,10 @@ app.use("/api/v1/seller-dashboard", sellerDashboardRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/subCategory", subCategoryRoute);
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-// const clientBuildPath = path.join(__dirname, "../clozetweb/build");
-// app.use(express.static(clientBuildPath));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientBuildPath = path.join(__dirname, "../clozetweb/build");
+app.use(express.static(clientBuildPath));
 
 const corsOption = {
   origin: "*",
