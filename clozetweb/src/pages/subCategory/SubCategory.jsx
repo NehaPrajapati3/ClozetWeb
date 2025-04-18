@@ -65,6 +65,8 @@ function SubCategory() {
     }
   }, [subCategoryToEdit]);
 
+  
+
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 
@@ -91,6 +93,7 @@ function SubCategory() {
 
       let res;
       if (subCategoryToEdit?._id) {
+          console.log("subCategoryToEdit inside if:", ...formData);
         // Update Coupon
         res = await axios.put(
           `${process.env.REACT_APP_API_URL}/api/v1/subCategory/edit/${subCategoryToEdit._id}`,
@@ -171,6 +174,17 @@ function SubCategory() {
       toast.error(error.response.data.message);
       console.log(error);
     }
+  };
+
+  const handleReset = async () => {
+    setNewSubCategory({
+      subCategoryId: "",
+      subCategoryName: "",
+      subCategoryStatus: false,
+      image: [],
+      sizeChart: [],
+      mainCategoryName: "",
+    });
   };
 
   return (
@@ -331,7 +345,9 @@ function SubCategory() {
                 </div>
                 <div className="title-box4">
                   <div className="title-btn-box">
-                    <Button className="rst-btn">Reset</Button>
+                    <Button className="rst-btn" onClick={handleReset}>
+                      Reset
+                    </Button>
                     <Button className="subt-btn" type="submit">
                       Submit
                     </Button>
@@ -423,7 +439,10 @@ function SubCategory() {
                           <td className="ac-box">
                             <Button
                               className="hipen"
-                              onClick={(e) => handleEdit(e, subCategory)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleEdit(subCategory);
+                              }}
                             >
                               <HiPencil />
                             </Button>

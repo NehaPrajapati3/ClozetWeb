@@ -96,6 +96,7 @@ export const addItem = async (req, res) => {
       subcategory,
       shortDesc,
       detailedDesc,
+      tags,
       brand,
       sku,
       sellingPrice,
@@ -158,6 +159,7 @@ export const addItem = async (req, res) => {
       subcategory,
       shortDesc,
       detailedDesc,
+      tags,
       brand,
       sku,
       sellingPrice,
@@ -225,9 +227,40 @@ export const editItem = async (req, res) => {
       });
     }
 
-    // Upload new image if available
+    // ✅ Parse stock if it's a string (FormData sends it as string)
+    if (typeof updateData.stock === "string") {
+      try {
+        updateData.stock = JSON.parse(updateData.stock);
+      } catch (err) {
+        return res.status(400).json({
+          message: "Invalid stock format.",
+          success: false,
+        });
+      }
+    }
+
+    // ✅ (Optional) Parse visibility too
+    if (typeof updateData.visibility === "string") {
+      try {
+        updateData.visibility = JSON.parse(updateData.visibility);
+      } catch (err) {
+        return res.status(400).json({
+          message: "Invalid visibility format.",
+          success: false,
+        });
+      }
+    }
+
+    // ✅ (Optional) Handle tags if comma-separated
+    if (typeof updateData.tags === "string") {
+      updateData.tags = updateData.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+    }
+
+    // 📷 Upload new image if available
     if (req.files["image"]) {
-      // Delete old image from Cloudinary
       if (updatedItem.imageUrl && updatedItem.imageUrl.length > 0) {
         const oldImagePublicId = updatedItem.imageUrl[0]
           .split("/")
@@ -239,47 +272,41 @@ export const editItem = async (req, res) => {
         );
       }
 
-      // Upload new image
       const imagePath = req.files["image"][0].path;
       const imageResult = await cloudinary.uploader.upload(imagePath, {
         folder: "uploads/products/images",
         resource_type: "image",
       });
 
-      // Assign as array
       updateData.imageUrl = [imageResult.secure_url];
-
-      // Clean up local file
       fs.unlinkSync(imagePath);
     }
 
-    // Upload new video if available
+    // 🎥 Upload new video if available
     if (req.files["video"]) {
-      // Delete old video from Cloudinary
       if (updatedItem.videoUrl) {
         const oldVideoPublicId = updatedItem.videoUrl
           .split("/")
           .pop()
           .split(".")[0];
+
         await cloudinary.uploader.destroy(
           `uploads/products/videos/${oldVideoPublicId}`,
-          {
-            resource_type: "video",
-          }
+          { resource_type: "video" }
         );
       }
 
-      // Upload new video
       const videoPath = req.files["video"][0].path;
       const videoResult = await cloudinary.uploader.upload(videoPath, {
         folder: "uploads/products/videos",
         resource_type: "video",
       });
+
       updateData.videoUrl = videoResult.secure_url;
       fs.unlinkSync(videoPath);
     }
 
-    // Update product with new data
+    // ✅ Update the product with new data
     updatedItem = await Product.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
@@ -316,15 +343,18 @@ export const deleteItem = async (req, res) => {
     }
 
     // Delete image from Cloudinary if exists
-    if (deletedItem.imageUrl) {
-      const oldImagePublicId = deletedItem.imageUrl
-        .split("/")
-        .pop()
-        .split(".")[0];
-      await cloudinary.uploader.destroy(
-        `uploads/products/images/${oldImagePublicId}`
-      );
-    }
+   if (Array.isArray(deletedItem.imageUrl)) {
+     for (const url of deletedItem.imageUrl) {
+       if (typeof url === "string") {
+         const publicId = url.split("/").pop().split(".")[0];
+
+         await cloudinary.uploader.destroy(
+           `uploads/products/images/${publicId}`
+         );
+       }
+     }
+   }
+
 
     // Delete video from Cloudinary if exists
     if (deletedItem.videoUrl) {

@@ -62,9 +62,8 @@ const productSchema = new mongoose.Schema(
       default: {},
     },
     stockStatus: {
-      type: String,
-      enum: ["In Stock", "Out of Stock", "Limited Stock", ""],
-      default: "In Stock",
+      type: Boolean,
+      default: false,
     },
     restockDate: {
       type: String,

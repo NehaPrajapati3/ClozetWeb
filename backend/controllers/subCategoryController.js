@@ -148,28 +148,84 @@ export const updateSubCategory = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    const updatedSubCategory = await SubCategory.findByIdAndUpdate(
-      id,
-      updateData,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    console.log("files received:", req.body);
+     const mainCategory = await Category.findOne({
+       categoryName: updateData.mainCategoryName,
+     });
 
-    if (!updatedSubCategory) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Sub category not found" });
-    }
+     if (!mainCategory) {
+       return res.status(404).json({ message: "Category not found" });
+     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Sub category updated",
-        updatedSubCategory,
-      });
+     updateData.mainCategoryId = mainCategory._id;
+
+    let updatedItem = await SubCategory.findById(id);
+       if (!updatedItem) {
+         return res.status(404).json({
+           message: "Sub Category not found.",
+           success: false,
+         });
+       }
+       console.log("files received:", req.files);
+       // 📷 Upload new image if available
+       if (req.files["image"]) {
+         if (updatedItem.subCategoryImageUrl && updatedItem.subCategoryImageUrl.length > 0) {
+           const oldImagePublicId = updatedItem.subCategoryImageUrl[0]
+             .split("/")
+             .pop()
+             .split(".")[0];
+   
+           await cloudinary.uploader.destroy(
+             `uploads/subCategories/images/${oldImagePublicId}`
+           );
+         }
+   
+         const imagePath = req.files["image"][0].path;
+         const imageResult = await cloudinary.uploader.upload(imagePath, {
+           folder: "uploads/subCategories/images",
+           resource_type: "image",
+         });
+   
+         updateData.subCategoryImageUrl = [imageResult.secure_url];
+         fs.unlinkSync(imagePath);
+       }
+
+       if (req.files["sizeChart"]) {
+         if (
+           updatedItem.subCategorySizeChartUrl &&
+           updatedItem.subCategorySizeChartUrl.length > 0
+         ) {
+           const oldImagePublicId = updatedItem.subCategorySizeChartUrl[0]
+             .split("/")
+             .pop()
+             .split(".")[0];
+
+           await cloudinary.uploader.destroy(
+             `uploads/subCategories/sizeCharts/${oldImagePublicId}`
+           );
+         }
+
+         const imagePath = req.files["sizeChart"][0].path;
+         const imageResult = await cloudinary.uploader.upload(imagePath, {
+           folder: "uploads/subCategories/sizeCharts",
+           resource_type: "image",
+         });
+
+         updateData.subCategorySizeChartUrl = [imageResult.secure_url];
+         fs.unlinkSync(imagePath);
+       }
+  
+       // ✅ Update the product with new data
+       updatedItem = await SubCategory.findByIdAndUpdate(id, updateData, {
+         new: true,
+         runValidators: true,
+       });
+   
+       return res.status(200).json({
+         message: "Sub Category updated successfully.",
+         success: true,
+         updatedItem,
+       });
   } catch (error) {
     console.error("Update error:", error);
     res

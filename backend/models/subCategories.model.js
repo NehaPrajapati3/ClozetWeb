@@ -15,12 +15,12 @@ const subCategoryModel = new mongoose.Schema(
       default: false,
     },
     subCategoryImageUrl: {
-      type: String,
+      type: [String],
       required: true,
     },
    
     subCategorySizeChartUrl: {
-      type: String,
+      type: [String],
       default:""
     },
    mainCategoryId: {

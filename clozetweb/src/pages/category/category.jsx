@@ -125,6 +125,15 @@ const Category = () => {
     }
   };
 
+  const handleReset = async () => {
+    setNewCategory({
+      categoryId: "",
+      categoryName: "",
+      categoryStatus: false,
+      featured: false,
+    });
+  }
+
   return (
     <>
       <div className="coupon-section">
@@ -223,7 +232,9 @@ const Category = () => {
                 </div>
                 <div className="title-box4">
                   <div className="title-btn-box">
-                    <Button className="rst-btn">Reset</Button>
+                    <Button className="rst-btn" onClick={handleReset}>
+                      Reset
+                    </Button>
                     <Button className="subt-btn" type="submit">
                       Submit
                     </Button>
@@ -283,7 +294,10 @@ const Category = () => {
                           <td className="ac-box">
                             <Button
                               className="hipen"
-                              onClick={(e) => handleEdit(e, category)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleEdit(category);
+                              }}
                             >
                               <HiPencil />
                             </Button>

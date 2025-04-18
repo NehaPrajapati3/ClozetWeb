@@ -44,13 +44,16 @@ function AddNewItem() {
   //   setAllItem(event.target.value);
   // };
 
-   useGetCategories();
-    const categories = useSelector(selectCategories);
-    console.log("Categories to select:", categories);
-  
-     useGetSubCategories();
-      const subCategories = useSelector(selectSubCategories);
-      console.log("subCategories:", subCategories);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [sizeQuantity, setSizeQuantity] = useState("");
+
+  useGetCategories();
+  const categories = useSelector(selectCategories);
+  console.log("Categories to select:", categories);
+
+  useGetSubCategories();
+  const subCategories = useSelector(selectSubCategories);
+  console.log("subCategories:", subCategories);
 
   const location = useLocation();
   const productToEdit = location.state?.product || null;
@@ -58,7 +61,7 @@ function AddNewItem() {
   const [imageFile, setImageFile] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
   const [sku, setSku] = useState("");
-  const sizes = ["S", "M", "L", "XL"];
+  //const sizes = ["S", "M", "L", "XL"];
 
   let productId;
   const [newProduct, setNewProduct] = useState({
@@ -76,7 +79,7 @@ function AddNewItem() {
     discountValue: productToEdit?.discountValue || "",
     taxIncluded: productToEdit?.taxIncluded ?? true,
     stock: productToEdit?.stock || {},
-    stockStatus: productToEdit?.stockStatus || "",
+    stockStatus: productToEdit?.stockStatus || false,
     restockDate: productToEdit?.restockDate || "",
     image: productToEdit?.image || [],
     video: productToEdit?.video || "",
@@ -113,7 +116,7 @@ function AddNewItem() {
         discountValue: productToEdit?.discountValue || "",
         taxIncluded: productToEdit?.taxIncluded ?? true,
         stock: productToEdit?.stock || {},
-        stockStatus: productToEdit?.stockStatus || "",
+        stockStatus: productToEdit?.stockStatus || false,
         restockDate: productToEdit?.restockDate || "",
         image: productToEdit?.image || [],
         video: productToEdit?.video || "",
@@ -130,39 +133,24 @@ function AddNewItem() {
     }
   }, [productToEdit]);
 
-  const handleAutoGenerateSKU = (e, selectedSize) => {
-    e.preventDefault();
-   
-    const sizeValue = newProduct.stock?.[selectedSize];
+ const handleAutoGenerateSKU = (e) => {
+   e.preventDefault();
 
-    if (
-      !newProduct.category ||
-      !newProduct.subcategory ||
-      !sizeValue
-    ) {
-      toast.error(
-        "Please fill category, subcategory, selected size, and ID to generate SKU."
-      );
-      return;
-    }
+   // Ensure that category and subcategory are available
+   if (!newProduct.name || !newProduct.category || !newProduct.subcategory) {
+     toast.error("Please fill category and subcategory to generate SKU.");
+     return;
+   }
 
-    const newSku = `${newProduct.category
-      .slice(0, 3)
-      .toUpperCase()}-${newProduct.subcategory
-      .slice(0, 3)
-      .toUpperCase()}-${selectedSize.toUpperCase()}`;
-    setSku(newSku);
-    toast.success("SKU auto-generated.");
-  };
-
-  const handleStockChange = (size, value) => {
-    setNewProduct((prev) => ({
-      ...prev,
-      stock: { ...prev.stock, [size]: value },
-    }));
-  };
-
- 
+   // Generate SKU using only category and subcategory
+   const newSku = `${newProduct.name
+     .slice(0, 3)
+     .toUpperCase()}-${newProduct.category
+     .slice(0, 3)
+     .toUpperCase()}-${newProduct.subcategory.slice(0, 3).toUpperCase()}`;
+   setSku(newSku); // Update the SKU
+   toast.success("SKU auto-generated.");
+ };
 
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
@@ -242,7 +230,7 @@ function AddNewItem() {
       discountValue: "",
       taxIncluded: true,
       stock: {},
-      stockStatus: "",
+      stockStatus: false,
       restockDate: "",
       image: [],
       video: "",
@@ -601,94 +589,155 @@ function AddNewItem() {
                 <div className="top-box">
                   <h2>Stock And Availability</h2>
                   <div className="main-box">
-                    <div className="price-box">
-                      <div className="price-heading">
-                        <h3>Stock & Sizes</h3>
+                    <div className="flex flex-row">
+                      <div className="price-box">
+                        <div className="stock-box">
+                          <div className="price-heading">
+                            <h3>Stock & Sizes</h3>
+                          </div>
+
+                          {/* Dropdown for size */}
+                          <div className="flex flex-row gap-2">
+                            <div className="flex flex-row gap-2">
+                              <FormControl
+                                fullWidth
+                                size="small"
+                                className="mb-2"
+                              >
+                                <InputLabel>Select Size</InputLabel>
+                                <Select
+                                  value={selectedSize}
+                                  onChange={(e) =>
+                                    setSelectedSize(e.target.value)
+                                  }
+                                >
+                                  {["S", "M", "L", "XL", "XXL"].map((size) => (
+                                    <MenuItem key={size} value={size}>
+                                      {size}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+
+                              {/* Quantity input */}
+                              <TextField
+                                type="number"
+                                label="Quantity"
+                                size="small"
+                                value={sizeQuantity}
+                                onChange={(e) =>
+                                  setSizeQuantity(e.target.value)
+                                }
+                                className="mb-2"
+                              />
+                            </div>
+
+                            {/* Add/Update button */}
+                            <div className="flex flex-row gap-2">
+                              <div>
+                                <button
+                                  className="bg-slate-400 h-11 w-15"
+                                  variant="contained"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (selectedSize && sizeQuantity !== "") {
+                                      setNewProduct((prev) => ({
+                                        ...prev,
+                                        stock: {
+                                          ...prev.stock,
+                                          [selectedSize]:
+                                            parseInt(sizeQuantity),
+                                        },
+                                      }));
+                                      setSizeQuantity("");
+                                      setSelectedSize("");
+                                    }
+                                  }}
+                                >
+                                  Add Size Stock
+                                </button>
+                              </div>
+
+                              {/* Display current stock per size */}
+                              <div >
+                                <h4>Current Size Stock:</h4>
+                                {Object.entries(newProduct.stock).map(
+                                  ([size, qty]) => (
+                                    <div key={size}>
+                                      {size}: {qty}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="price-input ml-1">
-                        {sizes.map((size) => (
-                          <div key={size}>
-                            <label>{`${size}`}</label>
-                            <input
-                              type="number"
-                              value={newProduct.stock?.[size] || ""}
-                              onChange={(e) =>
-                                handleStockChange(size, e.target.value)
+
+                      <div className="category-item-list">
+                        <div className="item-select-box">
+                          <div className="price-heading">
+                            <h3>Stock Status</h3>
+                          </div>
+                          <div className="price-input">
+                            <div className="mx-2">
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    checked={newProduct.stockStatus}
+                                    onChange={(e) =>
+                                      setNewProduct({
+                                        ...newProduct,
+                                        stockStatus: e.target.checked,
+                                      })
+                                    }
+                                  />
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-row">
+                      <div className="discount-box">
+                        <div className="discount-heading">
+                          <h3>Restock Date</h3>
+                        </div>
+                        <div className="price-input">
+                          <input
+                            type="date"
+                            placeholder="Discount value"
+                            value={newProduct.restockDate}
+                            onChange={(e) =>
+                              setNewProduct({
+                                ...newProduct,
+                                restockDate: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="discount-box">
+                        <div className="discount-heading">
+                          <h3>Price Includes GST</h3>
+                        </div>
+                        <div className="price-input">
+                          <div className="mx-2">
+                            <FormControlLabel
+                              control={
+                                <Switch
+                                  checked={newProduct.taxIncluded}
+                                  onChange={(e) =>
+                                    setNewProduct({
+                                      ...newProduct,
+                                      taxIncluded: e.target.checked,
+                                    })
+                                  }
+                                />
                               }
                             />
                           </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="category-item-list">
-                      <div className="item-select-box">
-                        <div className="price-heading">
-                          <h3>Stock Status</h3>
-                        </div>
-                        <div className="select-menu">
-                          <FormControl className="f-bg" size="small" fullWidth>
-                            <InputLabel className="s-bg">
-                              Stock Status
-                            </InputLabel>
-                            <Select
-                              value={newProduct.stockStatus || ""}
-                              onChange={(e) =>
-                                setNewProduct({
-                                  ...newProduct,
-                                  stockStatus: e.target.value,
-                                })
-                              }
-                            >
-                              <MenuItem value="In Stock">In Stock</MenuItem>
-                              <MenuItem value="Out of Stock">
-                                Out of Stock
-                              </MenuItem>
-                              <MenuItem value="Limited Stock">
-                                Limited Stock
-                              </MenuItem>
-                            </Select>
-                          </FormControl>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="discount-box">
-                      <div className="discount-heading">
-                        <h3>Restock Date</h3>
-                      </div>
-                      <div className="price-input">
-                        <input
-                          type="date"
-                          placeholder="Discount value"
-                          value={newProduct.restockDate}
-                          onChange={(e) =>
-                            setNewProduct({
-                              ...newProduct,
-                              restockDate: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="discount-box">
-                      <div className="discount-heading">
-                        <h3>Price Includes GST</h3>
-                      </div>
-                      <div className="price-input">
-                        <div className="mx-2">
-                          <FormControlLabel
-                            control={
-                              <Switch
-                                checked={newProduct.taxIncluded}
-                                onChange={(e) =>
-                                  setNewProduct({
-                                    ...newProduct,
-                                    taxIncluded: e.target.checked,
-                                  })
-                                }
-                              />
-                            }
-                          />
                         </div>
                       </div>
                     </div>
@@ -751,17 +800,17 @@ function AddNewItem() {
                     <div className="store-heading">
                       <h2>SKU / Product Code</h2>
                     </div>
-                    <div className=" price-input flex  flex-row gap-2">
+                    <div className="price-input flex flex-row gap-2">
                       <input
                         label="SKU / Product Code"
                         value={sku}
                         onChange={(e) => setSku(e.target.value)}
-                        placeholder="e.g., MEN-JEA-BLU-M-00123"
+                        placeholder="e.g., MEN-JEA"
                         sx={{ mb: 1 }}
                       />
                       <button
                         variant="outlined"
-                        className=" border-2 bg-blend-color border-b-gray-900 bg-slate-400 h-11 text-sm"
+                        className="border-2 bg-blend-color border-b-gray-900 bg-slate-400 h-11 text-sm"
                         onClick={handleAutoGenerateSKU}
                         sx={{ textTransform: "none" }}
                       >

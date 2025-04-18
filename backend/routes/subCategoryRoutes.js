@@ -31,7 +31,15 @@ router.get("/all", isUserAuthenticated, getAllSubCategories);
 router.get("/getOne/:id", isUserAuthenticated,  getSubCategoryById);
 
 // PUT - Update subcategory by ID
-router.put("/edit/:id", isUserAuthenticated, updateSubCategory);
+router.put(
+  "/edit/:id",
+  isUserAuthenticated,
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "sizeChart", maxCount: 1 },
+  ]),
+  updateSubCategory
+);
 
 // DELETE - Delete subcategory by ID
 router.delete("/delete/:id", deleteSubCategory);
