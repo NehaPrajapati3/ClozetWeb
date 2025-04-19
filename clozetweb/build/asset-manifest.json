@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.98cf23dc.css",
-    "main.js": "/static/js/main.fdb5b06b.js",
+    "main.js": "/static/js/main.0221aa87.js",
     "static/js/453.ace6aeea.chunk.js": "/static/js/453.ace6aeea.chunk.js",
     "static/media/bankcart.jpg": "/static/media/bankcart.d03375021fde91348bc6.jpg",
     "index.html": "/index.html",
     "main.98cf23dc.css.map": "/static/css/main.98cf23dc.css.map",
-    "main.fdb5b06b.js.map": "/static/js/main.fdb5b06b.js.map",
+    "main.0221aa87.js.map": "/static/js/main.0221aa87.js.map",
     "453.ace6aeea.chunk.js.map": "/static/js/453.ace6aeea.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.98cf23dc.css",
-    "static/js/main.fdb5b06b.js"
+    "static/js/main.0221aa87.js"
   ]
 }
